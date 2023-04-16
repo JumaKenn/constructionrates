@@ -1,0 +1,46 @@
+.cards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .card {
+    background-color: ;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    box-shadow: 0 0 5px #ddd;
+    padding: 30px;
+    margin: 20px;
+    width: 300px;
+    text-align: center;
+  }
+  .card:hover {
+    box-shadow: 0 0 10px #ddd;
+  }
+  
+  .card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .card p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  button {
+    background-color: #333;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
