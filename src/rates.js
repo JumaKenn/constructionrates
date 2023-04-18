@@ -120,7 +120,7 @@ function ComponentSearch() {
 
             {selectedClass && (
               <div>
-                <label htmlFor="labourCosts">Labour Costs:</label>
+                <label htmlFor="labourCosts">Labour Costs in %:</label>
                 <input
                   type="number"
                   id="labourCosts"
@@ -132,7 +132,7 @@ function ComponentSearch() {
                   required
                 />
 
-                <label htmlFor="profitOverheads">Profit Overheads:</label>
+                <label htmlFor="profitOverheads">Profit Overheads in %:</label>
                 <input
                   type="number"
                   id="profitOverheads"
