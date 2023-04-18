@@ -18,14 +18,6 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-<<<<<<< HEAD
-      <header className="App-header">
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <Cards />
-
-
-      </header>
-=======
       <header className="App-header"></header>
       {/* <img src={logo} className="App-logo" alt="logo" /> */}
       <div className="container">
@@ -41,9 +33,9 @@ function App() {
       </div>
 
 
->>>>>>> master
     </div>
   );
+  
 }
 
 export default App;
