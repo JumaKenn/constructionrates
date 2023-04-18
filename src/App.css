@@ -14,14 +14,67 @@
 }
 
 .App-header {
+  position: relative;
+  background-color: #282c34;
+  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.container {
+  position: relative;
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.cards {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease;
+}
+
+.show-rates .cards {
+  transform: translateY(-100%);
+}
+
+.rates {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(100%);
+  transition: all 0.5s ease;
+  background-color: #282c34;
+}
+
+.show-rates .rates {
+  transform: translateY(0);
+}
+
+.back-btn {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
 }
 
 .App-link {
