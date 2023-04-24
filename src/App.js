@@ -21,7 +21,7 @@ function App() {
       <header className="App-header"></header>
       {/* <img src={logo} className="App-logo" alt="logo" /> */}
       <div className="container">
-        <div className="cards" onClick={handleClick}>
+        <div className="cards" >
           <Cards />
         </div>
         <div className="rates">
