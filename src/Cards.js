@@ -4,10 +4,8 @@ import { Link } from 'react-router-dom';
 
 
 function Cards() {
-    const handleClick = (event) => {
-    if (event) {
-      event.preventDefault();
-    }
+    const handleClick = () => {
+    
     document.querySelector('.container').classList.toggle('show-rates');
   };
     return (
@@ -31,3 +29,4 @@ function Cards() {
 }
 
 export default Cards;
+
