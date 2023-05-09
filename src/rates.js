@@ -152,7 +152,7 @@ function ComponentSearch() {
           <div>
 
             <div>
-              <label htmlFor="labourCosts">Labour Costs in %:</label>
+              <label htmlFor="labourCosts">Labour Costs in ksh:</label>
               <input
                 type="number"
                 id="labourCosts"
@@ -185,7 +185,7 @@ function ComponentSearch() {
       {loading && <p>Loading...</p>}
       {rate !== null && (
         <p>
-          The rate per cubic meter for {selectedComponent} ({selectedClass}) is{" "}
+          The rate per kg for {selectedComponent} ({selectedClass}) is{" "}
           {rate.toFixed(2)}
         </p>
       )}
