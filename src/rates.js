@@ -148,6 +148,38 @@ function ComponentSearch() {
             <button type="submit">Calculate Rate</button>
           </div>
         )}
+        {selectedComponent === 'Steel' && (
+          <div>
+
+            <div>
+              <label htmlFor="labourCosts">Labour Costs in %:</label>
+              <input
+                type="number"
+                id="labourCosts"
+                name="labourCosts"
+                min="0"
+                step="0.01"
+                value={labourCosts}
+                onChange={handleLabourCostsChange}
+                required
+              />
+
+              <label htmlFor="profitOverheads">Profit Overheads in %:</label>
+              <input
+                type="number"
+                id="profitOverheads"
+                name="profitOverheads"
+                min="0"
+                step="0.01"
+                value={profitOverheads}
+                onChange={handleProfitOverheadsChange}
+                required
+              />
+            </div>
+
+            <button type="submit">Calculate Rate</button>
+          </div>
+        )}
       </form>
 
       {loading && <p>Loading...</p>}
