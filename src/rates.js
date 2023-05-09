@@ -185,7 +185,7 @@ function ComponentSearch() {
       {loading && <p>Loading...</p>}
       {rate !== null && (
         <p>
-          The rate per kg for {selectedComponent} ({selectedClass}) is{" "}
+          The rate per kg for {selectedComponent} is{" "}
           {rate.toFixed(2)}
         </p>
       )}
