@@ -19,8 +19,13 @@ const LoginForm = () => {
 
       console.log(response.data); // Handle success response
     } catch (error) {
-      console.log(error.response.data);
-      setErrorMessage(error.response.data.message);    // Handle error response
+      if (error.response) {
+        console.log(error.response.data); // Handle error response
+        setErrorMessage(error.response.data.message); // Store error message in state
+      } else {
+        console.log('An error occurred:', error.message); // Handle generic error
+        setErrorMessage('An error occurred. Please try again.'); // Store generic error message in state
+      }
     }
   };
 
