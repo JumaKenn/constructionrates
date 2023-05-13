@@ -6,6 +6,7 @@ import './LoginForm.css'; // Import the CSS file for the LoginForm component
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +19,8 @@ const LoginForm = () => {
 
       console.log(response.data); // Handle success response
     } catch (error) {
-      console.log(error.response.data); // Handle error response
+      console.log(error.response.data);
+      setErrorMessage(error.response.data.message);    // Handle error response
     }
   };
 
@@ -39,6 +41,11 @@ const LoginForm = () => {
         />
         <button type="submit">Login</button>
       </form>
+      {errorMessage && ( // Display error message if it exists
+        <div className="error-message">
+          {errorMessage}
+        </div>
+      )}
       <div className="reg-item">
         <button><Link to="/register">No account? Click to register</Link></button>
       </div>
