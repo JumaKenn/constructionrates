@@ -4,6 +4,7 @@ import "./rates.css";
 function ComponentSearch() {
   const [components, setComponents] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("");
+  const [selectedRatetype, setSelectedRateType] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [labourCosts, setLabourCosts] = useState(0);
   const [profitOverheads, setProfitOverheads] = useState(0);
@@ -13,8 +14,16 @@ function ComponentSearch() {
   const handleComponentChange = (event) => {
     setSelectedComponent(event.target.value);
     setSelectedClass("");
+
+    if (event.target.value === "Concrete") {
+      setSelectedRateType('rate per cubic meter');
+    } else if (event.target.value === "Steel") {
+      setSelectedRateType('rate per kg');
+    }
+
     setRate(null);
   };
+
 
   const handleClassChange = (event) => {
     setSelectedClass(event.target.value);
@@ -101,7 +110,9 @@ function ComponentSearch() {
 
 
         {selectedComponent === 'Concrete' && (
+
           <div>
+
             <label htmlFor="class">Class:</label>
             <select
               id="class"
@@ -149,6 +160,7 @@ function ComponentSearch() {
           </div>
         )}
         {selectedComponent === 'Steel' && (
+
           <div>
 
             <div>
@@ -185,7 +197,7 @@ function ComponentSearch() {
       {loading && <p>Loading...</p>}
       {rate !== null && (
         <p>
-          The rate per kg for {selectedComponent} is{" "}
+          The {selectedRatetype} for {selectedComponent} is{" "}
           {rate.toFixed(2)}
         </p>
       )}
