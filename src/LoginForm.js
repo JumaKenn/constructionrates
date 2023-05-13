@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import './LoginForm.css'; // Import the CSS file for the LoginForm component
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -16,6 +18,8 @@ const LoginForm = () => {
         username: username,
         password: password,
       });
+      navigate('/home')
+
 
       console.log(response.data); // Handle success response
     } catch (error) {
