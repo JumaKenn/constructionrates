@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useHistory } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import Navbar from './Navbar';
@@ -8,12 +8,15 @@ import ComponentSearch from './rates';
 import { FaArrowAltCircleUp } from 'react-icons/fa';
 
 function App() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('isLoggedIn');
     if (!loggedIn) {
-      history.push('/login');
+      navigate('/login');
+    }
+    else {
+      navigate('/home')
     }
   }, []);
 
@@ -29,19 +32,21 @@ function App() {
       <Navbar />
       <header className="App-header"></header>
       <div className="container">
-        <div className="cards">
-          <Cards />
-        </div>
+
         <div className="rates">
           <FaArrowAltCircleUp className="back-btn" onClick={() => handleClick(null)} />
+        </div>
+        <div className='routess'>
           <Routes>
             <Route path="/login" element={<LoginForm />} />
+            <Route path="/home" element={<Cards />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/rates" element={<ComponentSearch />} />
           </Routes>
         </div>
       </div>
     </div>
+
   );
 }
 

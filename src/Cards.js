@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 
 function Cards() {
     const handleClick = () => {
-    
-    document.querySelector('.container').classList.toggle('show-rates');
-  };
+
+        document.querySelector('.container').classList.toggle('show-rates');
+    };
     return (
         <div className="cards">
             <Link to="/rates" className="card-link">
-                <div className="card" onClick={handleClick}>
+                <div className="card">
                     <h2>Rates</h2>
                     <p>Get realtime construction rates</p>
 

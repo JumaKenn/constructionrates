@@ -51,6 +51,16 @@
   transform: translateY(-100%);
 }
 
+.routess {
+  position: absolute;
+  paddint-top: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+  background-color: #282c34;
+}
+
 .rates {
   position: absolute;
   top: 0;
