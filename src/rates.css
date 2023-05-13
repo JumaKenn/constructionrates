@@ -1,6 +1,13 @@
 /* rates.css */
 
 /* Styles for form inputs */
+.rates-form {
+  width: 300px;
+  margin: 0 auto;
+  padding-top: 150px;
+  
+  
+}
 label {
     display: block;
     margin-bottom: 0.5rem;

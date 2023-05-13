@@ -77,7 +77,7 @@ function ComponentSearch() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="rates-form">
         <label htmlFor="component">Component:</label>
 
         <select
