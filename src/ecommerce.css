@@ -1,0 +1,30 @@
+/* CSS for ItemComponent */
+.item-component {
+    padding: 20px;
+  }
+  
+  .item {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .item h2 {
+    margin-top: 0;
+  }
+  
+  .item img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+  .section {
+    margin-bottom: 30px;
+  }
+  
+  .section h2 {
+    margin-bottom: 10px;
+  }
+  

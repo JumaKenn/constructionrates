@@ -58,6 +58,9 @@ const LoginForm = () => {
       <div className="reg-item">
         <button><Link to="/register">No account? Click to register</Link></button>
       </div>
+      <div className="reg-item">
+        <button><Link to="/registershop">Click to register your shop</Link></button>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Select from 'react-select'
 import "./rates.css";
 
 function ComponentSearch() {
@@ -11,13 +12,13 @@ function ComponentSearch() {
   const [rate, setRate] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleComponentChange = (event) => {
-    setSelectedComponent(event.target.value);
+  const handleComponentChange = (selectedOption) => {
+    setSelectedComponent(selectedOption.value);
     setSelectedClass("");
 
-    if (event.target.value === "Concrete") {
+    if (selectedOption.value === "Concrete") {
       setSelectedRateType('rate per cubic meter');
-    } else if (event.target.value === "Steel") {
+    } else if (selectedOption.value === "Steel") {
       setSelectedRateType('rate per kg');
     }
 
@@ -67,15 +68,18 @@ function ComponentSearch() {
 
 
   useEffect(() => {
-    fetch("https://django-server-production-5811.up.railway.app/apis/components/")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://django-server-production-5811.up.railway.app/apis/components/");
+        const data = await response.json();
         setComponents(data);
         console.log(data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error:", error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const classes = selectedComponent
@@ -85,53 +89,83 @@ function ComponentSearch() {
   const showRate = selectedClass && rate !== null;
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="rates-form">
-        <label htmlFor="component">Component:</label>
+    <div className="introo">
+      <div className="Rates">
+        <form onSubmit={handleSubmit} className="rates-form">
+          <label htmlFor="component">Component:</label>
 
-        <select
-          id="component"
-          name="component"
-          value={selectedComponent}
-          onChange={handleComponentChange}
-          required
-        >
-          <option key="default" value="">Select a component</option>
-          {components.length > 0 &&
-            components.map((component) => (
-              <option key={component.id} value={component.id}>
-                {component}
-              </option>
-            ))}
-        </select>
+          <Select
+            id="component"
+            name="component"
+            value={selectedComponent}
+            onChange={handleComponentChange}
+
+            options={components.map(component => ({ value: component, label: component }))}
+            placeholder={selectedComponent ? selectedComponent : "Select a component"}
+            isSearchable
+
+          />
 
 
 
 
 
-        {selectedComponent === 'Concrete' && (
+          {selectedComponent === 'Concrete' && (
 
-          <div>
+            <div>
 
-            <label htmlFor="class">Class:</label>
-            <select
-              id="class"
-              name="class"
-              value={selectedClass}
-              onChange={handleClassChange}
-              required
-            >
-              <option value="">Select a Class</option>
-              <option value="15">Class 15</option>
-              <option value="20">Class 20</option>
-              <option value="25">Class 25</option>
-              <option value="30">Class 30</option>
-            </select>
+              <label htmlFor="class">Class:</label>
+              <select
+                id="class"
+                name="class"
+                value={selectedClass}
+                onChange={handleClassChange}
+                required
+              >
+                <option value="">Select a Class</option>
+                <option value="15">Class 15</option>
+                <option value="20">Class 20</option>
+                <option value="25">Class 25</option>
+                <option value="30">Class 30</option>
+              </select>
 
 
-            {selectedClass && (
+              {selectedClass && (
+                <div>
+                  <label htmlFor="labourCosts">Labour Costs in %:</label>
+                  <input
+                    type="number"
+                    id="labourCosts"
+                    name="labourCosts"
+                    min="0"
+                    step="0.01"
+                    value={labourCosts}
+                    onChange={handleLabourCostsChange}
+                    required
+                  />
+
+                  <label htmlFor="profitOverheads">Profit Overheads in %:</label>
+                  <input
+                    type="number"
+                    id="profitOverheads"
+                    name="profitOverheads"
+                    min="0"
+                    step="0.01"
+                    value={profitOverheads}
+                    onChange={handleProfitOverheadsChange}
+                    required
+                  />
+                </div>
+              )}
+              <button type="submit">Calculate Rate</button>
+            </div>
+          )}
+          {selectedComponent === 'Steel' && (
+
+            <div>
+
               <div>
-                <label htmlFor="labourCosts">Labour Costs in %:</label>
+                <label htmlFor="labourCosts">Labour Costs in ksh:</label>
                 <input
                   type="number"
                   id="labourCosts"
@@ -155,52 +189,23 @@ function ComponentSearch() {
                   required
                 />
               </div>
-            )}
-            <button type="submit">Calculate Rate</button>
-          </div>
-        )}
-        {selectedComponent === 'Steel' && (
 
-          <div>
-
-            <div>
-              <label htmlFor="labourCosts">Labour Costs in ksh:</label>
-              <input
-                type="number"
-                id="labourCosts"
-                name="labourCosts"
-                min="0"
-                step="0.01"
-                value={labourCosts}
-                onChange={handleLabourCostsChange}
-                required
-              />
-
-              <label htmlFor="profitOverheads">Profit Overheads in %:</label>
-              <input
-                type="number"
-                id="profitOverheads"
-                name="profitOverheads"
-                min="0"
-                step="0.01"
-                value={profitOverheads}
-                onChange={handleProfitOverheadsChange}
-                required
-              />
+              <button type="submit">Calculate Rate</button>
             </div>
+          )}
+          {loading && <p>Loading...</p>}
+          {
+            rate !== null && (
+              <p className="ptag">
+                The {selectedRatetype} for {selectedComponent} is{" "}
+                <span className="underline-text">{rate.toFixed(2)}</span> KES
+              </p>
+            )
+          }
+        </form>
 
-            <button type="submit">Calculate Rate</button>
-          </div>
-        )}
-      </form>
 
-      {loading && <p>Loading...</p>}
-      {rate !== null && (
-        <p>
-          The {selectedRatetype} for {selectedComponent} is{" "}
-          {rate.toFixed(2)}
-        </p>
-      )}
+      </div >
     </div>
   );
 }

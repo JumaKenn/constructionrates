@@ -1,0 +1,60 @@
+.cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #ddd;
+  background-color: rgba(0, 0, 0, 0.5);
+  
+  margin: 20px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease-in-out;
+
+  /* Add media query for screens smaller than 768px */
+  @media screen and (max-width: 768px) {
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+  }
+}
+
+.card:hover {
+  transform: scale(1.1);
+}
+
+.card h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.card p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.card button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}

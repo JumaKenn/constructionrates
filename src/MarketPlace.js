@@ -3,7 +3,8 @@ import './MarketPlace.css'
 
 import { useState, useEffect } from 'react';
 import { FaArrowAltCircleUp } from 'react-icons/fa';
-
+import cloudinary from 'cloudinary-core';
+import Axios from "axios";
 
 
 const MarketPlace = () => {
@@ -14,6 +15,9 @@ const MarketPlace = () => {
   const [quantity, setQuantity] = useState('');
   const [components, setComponents] = useState([]);
   const [viewingComponent, setViewingComponent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageurl] = useState('');
+
 
   useEffect(() => {
     // Retrieve components from local storage on component mount
@@ -42,21 +46,21 @@ const MarketPlace = () => {
     localStorage.setItem('components', JSON.stringify(updatedComponents));
   };
   const handleView = (index) => {
-  // Retrieve the component object using the index
-  const viewingComponent = components[index];
+    // Retrieve the component object using the index
+    const viewingComponent = components[index];
 
-  // Perform the desired actions for editing/viewing the component
-  // For example, you can set the component as the current editing component in the state
-  setViewingComponent(viewingComponent);
+    // Perform the desired actions for editing/viewing the component
+    // For example, you can set the component as the current editing component in the state
+    setViewingComponent(viewingComponent);
 
-  // You can also navigate to a different page or display a modal for editing/viewing the component
-  // Modify the code based on your specific requirements
-};
-    const handleClick = (event) => {
+    // You can also navigate to a different page or display a modal for editing/viewing the component
+    // Modify the code based on your specific requirements
+  };
+  const handleClick = (event) => {
     if (event) {
       event.preventDefault();
     }
-   setShowForm(false);
+    setShowForm(false);
   };
 
   const handleSubmit = (event) => {
@@ -69,8 +73,8 @@ const MarketPlace = () => {
       price,
       quantity,
       image: event.target.picture.files[0], // Access the uploaded image file
-  };
-   
+    };
+
 
     // Update components state and save to local storage
     const updatedComponents = [...components, newComponent];
@@ -88,56 +92,86 @@ const MarketPlace = () => {
   };
 
 
+
   const handleAllComponentsSubmitToEndpoint = async () => {
-  try {
-    // Create an array to store the product data
-    const products = [];
+    try {
+      // Display a loading state to the user
+      setLoading(true);
 
-    // Create a FormData object to send the product data
-    const formData = new FormData();
 
-    // Convert the components data to product format
-    components.forEach((component) => {
-      // Create a new FormData entry for each product
-      const productData = new FormData();
-      productData.append('title', component.itemName);
-      productData.append('description', component.description);
-      productData.append('price', component.price);
-      productData.append('quantity', component.quantity);
-      productData.append('image', component.picture); // Assuming "component.picture" holds the uploaded image file
+      // Create an array to store the product data
+      const products = [];
 
-      // Add the product FormData to the array
-      products.push(productData);
-    });
+      // Convert the components data to product format
+      for (const component of components) {
+        // Upload the image to Cloudinary
+        const formData = new FormData();
+        formData.append("file", component.image);
+        formData.append("upload_preset", "a5bkfjiv");
 
-    // Append all product FormData objects to the main FormData
-    products.forEach((productData) => {
-      formData.append('products', productData);
-    });
+        Axios.post(
+          "https://api.cloudinary.com/v1_1/dzac7jcg9/image/upload",
+          formData
+        )
+          .then((response) => {
+            console.log(response);
+            setImageurl(response.data.secure_url);
+            console.log(response.data.secure_url);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
-    // Send the products data to the API endpoint
-    const response = await fetch('https://django-server-production-5811.up.railway.app/apis/products/', {
-      method: 'POST',
-      body: formData,
-    });
 
-    // Check if the request was successful
-    if (response.ok) {
-      // Clear the components data
-      setComponents([]);
-      localStorage.removeItem('components');
 
-      // Display a success message to the user
-      alert('Products added successfully!');
-    } else {
-      // Display an error message to the user
-      alert('Failed to add products.');
+        // Create a new product object with the image URL
+        const product = {
+          title: component.itemName,
+          description: component.description,
+          price: component.price,
+          quantity: component.quantity,
+          image_url: imageUrl, // Use the Cloudinary image URL
+        };
+        console.log(product);
+
+        // Add the product to the array
+        products.push(product);
+      }
+
+      // Send the products data to the API endpoint as JSON
+      const response = await fetch('http://127.0.0.1:8000/apis/products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+
+        },
+        body: JSON.stringify(products),
+      });
+
+      // Check if the request was successful
+      if (response.ok) {
+        // Clear the components data
+        setComponents([]);
+        localStorage.removeItem('components');
+
+        // Display a success message to the user
+        alert('Products added successfully!');
+      } else {
+        // Display an error message to the user
+        alert('Failed to add products.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      // Hide the loading state
+      setLoading(false);
     }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
+  };
 
+  if (loading) {
+    // Display loading indicator while data is being fetched
+    return <div>Loading...</div>;
+  }
 
 
   return (
@@ -150,12 +184,12 @@ const MarketPlace = () => {
 
       {showForm && (
         <div className="add-component-container">
-       
+
 
           <form onSubmit={handleSubmit} className="marketplace-form">
-          
-          
-            
+
+
+
             <button className="back-btn" onClick={() => setShowForm(false)}>Close</button>
             <br />
 
@@ -167,6 +201,7 @@ const MarketPlace = () => {
                 value={itemName}
                 onChange={handleInputChange}
                 className="form-input"
+                required
               />
             </label>
             <br />
@@ -177,6 +212,7 @@ const MarketPlace = () => {
                 value={description}
                 onChange={handleInputChange}
                 className="form-textarea"
+                required
               />
             </label>
             <br />
@@ -188,6 +224,7 @@ const MarketPlace = () => {
                 value={price}
                 onChange={handleInputChange}
                 className="form-input"
+                required
               />
             </label>
             <br />
@@ -199,6 +236,7 @@ const MarketPlace = () => {
                 value={quantity}
                 onChange={handleInputChange}
                 className="form-input"
+                required
               />
             </label>
             <br />
@@ -210,6 +248,7 @@ const MarketPlace = () => {
                 accept="image/*"
                 onChange={handleInputChange}
                 className="form-input"
+                required
               />
             </label>
             <br />
@@ -222,36 +261,36 @@ const MarketPlace = () => {
         </div>
       )}
       <div className="component-list-container">
-  <h2>Added Items:</h2>
-  {components.map((component, index) => (
-    <div key={index} className="component-entry">
-      <span className="counter">{index + 1}. </span>
-      <span className="item-name">{component.itemName}</span>
-        <span className="price">Price: {component.price}</span>
-      <span className="quantity">Quantity: {component.quantity}</span>
-      <button className="list-button" onClick={() => handleDelete(index)}>Delete</button>
-      <button className="list-button2" onClick={() => handleView(index)}>View</button>
-      <button className="list-button3" onClick={handleAllComponentsSubmitToEndpoint}>
-  Push to MarketPlace
-</button>
-    
-    </div>
-  ))}
- {viewingComponent && (
-  <div className="component-details">
-    <h3>{viewingComponent.itemName}</h3>
-    <p>Description: {viewingComponent.description}</p>
-    <p>Price: {viewingComponent.price}</p>
-    <p>Quantity: {viewingComponent.quantity}</p>
-    {viewingComponent.imageUrl && (
-      <img src={viewingComponent.imageUrl} alt="Component Image" />
-    )}
-    <button className="list-button2" onClick={() => setViewingComponent(null)}>
-      Close
-    </button>
-  </div>
-)}
-</div>
+        <h2>Added Items:</h2>
+        {components.map((component, index) => (
+          <div key={index} className="component-entry">
+            <span className="counter">{index + 1}. </span>
+            <span className="item-name">{component.itemName}</span>
+            <span className="price">Price: {component.price}</span>
+            <span className="quantity">Quantity: {component.quantity}</span>
+            <button className="list-button" onClick={() => handleDelete(index)}>Delete</button>
+            <button className="list-button2" onClick={() => handleView(index)}>View</button>
+            <button className="list-button3" onClick={handleAllComponentsSubmitToEndpoint} disabled={loading}>
+              {loading ? 'Loading...' : 'Push to Marketplace'}
+            </button>
+
+          </div>
+        ))}
+        {viewingComponent && (
+          <div className="component-details">
+            <h3>{viewingComponent.itemName}</h3>
+            <p>Description: {viewingComponent.description}</p>
+            <p>Price: {viewingComponent.price}</p>
+            <p>Quantity: {viewingComponent.quantity}</p>
+            {viewingComponent.imageUrl && (
+              <img src={viewingComponent.imageUrl} alt="Component Image" />
+            )}
+            <button className="list-button2" onClick={() => setViewingComponent(null)}>
+              Close
+            </button>
+          </div>
+        )}
+      </div>
 
     </div>
   );
