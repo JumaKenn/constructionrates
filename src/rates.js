@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from 'react-select'
 import "./rates.css";
+import { API_ENDPOINT_1 } from './apis/api';
 
 function ComponentSearch() {
   const [components, setComponents] = useState([]);
@@ -48,7 +49,7 @@ function ComponentSearch() {
       labourCosts: labourCosts,
       profitOverheads: profitOverheads,
     };
-    fetch("https://django-server-production-5811.up.railway.app/apis/rates/", {
+    fetch(`${API_ENDPOINT_1}/apis/rates/`, {
       method: "POST",
       body: JSON.stringify(data),
     })
@@ -70,7 +71,7 @@ function ComponentSearch() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://django-server-production-5811.up.railway.app/apis/components/");
+        const response = await fetch(`${API_ENDPOINT_1}/apis/components/`);
         const data = await response.json();
         setComponents(data);
         console.log(data);
