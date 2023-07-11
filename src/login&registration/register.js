@@ -6,6 +6,7 @@ import './RegisterForm.css';
 import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_ENDPOINT_1 } from '../apis/api';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -24,7 +25,7 @@ const Register = () => {
       return;
     }
     try {
-      const response = await axios.post('https://django-server-production-5811.up.railway.app/apis/register/', {
+      const response = await axios.post(`${API_ENDPOINT_1}/apis/register/`, {
         username: username,
         email: email,
         password: password,

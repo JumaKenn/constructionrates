@@ -3,6 +3,7 @@ import { useForm } from "react-cool-form";
 import { AuthContext } from '../AuthContext';
 import axios from 'axios';
 import './entry.css';
+import { API_ENDPOINT_1 } from '../apis/api';
 
 const Field = ({ label, id, ...rest }) => (
     <div className="form-field">
@@ -58,7 +59,7 @@ const CreateShopPage = () => {
 
             console.log(shop);
 
-            const response = await axios.post('https://django-server-production-5811.up.railway.app/apis/createshop/', { shop });
+            const response = await axios.post(`${API_ENDPOINT_1}/apis/createshop/`, { shop });
 
             console.log(response.data); // Handle success response
         } catch (error) {

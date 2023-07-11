@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import './loginregister.css';
 import { AuthContext } from '../AuthContext';
+import { API_ENDPOINT_1 } from '../apis/api';
 
 function LoginRegistrationPage() {
 
@@ -28,7 +29,7 @@ function LoginRegistrationPage() {
 
         try {
 
-            const response = await axios.post("https://django-server-production-5811.up.railway.app/apis/login/", {
+            const response = await axios.post(`${API_ENDPOINT_1}/apis/login/`, {
                 username: username,
                 password: password,
             });

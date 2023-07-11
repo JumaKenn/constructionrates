@@ -18,6 +18,7 @@ import Box from '@mui/material/Box';
 
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { API_ENDPOINT_1 } from '../apis/api';
 
 const style = {
     position: 'absolute',
@@ -86,7 +87,7 @@ const Cards = () => {
 
     useEffect(() => {
         // Fetch data from the API and set the products state
-        fetch("https://django-server-production-5811.up.railway.app/apis/ecommerce/")
+        fetch(`${API_ENDPOINT_1}/apis/ecommerce/`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);

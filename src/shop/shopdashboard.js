@@ -11,6 +11,7 @@ import Contacts from './scenes/contacts';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { ColorModeContext, useMode } from './theme';
 import CreateShopPage from './entry';
+import { API_ENDPOINT_1 } from '../apis/api';
 
 function ShopDashboard() {
     const { isLoggedIn, user } = useContext(AuthContext);
@@ -28,7 +29,7 @@ function ShopDashboard() {
         const fetchShop = async () => {
             try {
                 // Make API call to check if the logged-in user has a shop
-                const response = await axios.get(`https://django-server-production-5811.up.railway.app/apis/checkshop/${user.username}`);
+                const response = await axios.get(`${API_ENDPOINT_1}/apis/checkshop/${user.username}`);
                 setHasShop(response.data.hasShop);
                 console.log('done fetching');
                 setIsLoading(false);
@@ -38,10 +39,11 @@ function ShopDashboard() {
             }
         };
 
-        const checkShopAndRedirect = () => {
+        const checkShopAndRedirect = async () => {
             if (isLoggedIn) {
                 console.log(user.username);
-                fetchShop();
+                await fetchShop();
+                handleRedirect();
             } else {
                 // Redirect user if not logged in
                 login();
@@ -58,7 +60,7 @@ function ShopDashboard() {
         };
 
         checkShopAndRedirect();
-        handleRedirect();
+
     }, [isLoggedIn, user]);
 
     if (isLoading) {
