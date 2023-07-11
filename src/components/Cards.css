@@ -1,20 +1,22 @@
 .cards {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  padding-left: 400px;
 }
 
 .card {
-  width: 200px;
+  width: 300px;
   height: 200px;
   border: 1px solid #ddd;
   border-radius: 20px;
   box-shadow: 0 0 5px #ddd;
   background-color: rgba(0, 0, 0, 0.5);
-  
+
   margin: 20px;
   margin-top: 10px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,18 +36,18 @@
 }
 
 .card h2 {
-  font-size: 2rem;
+  font-size: 1.1rem;
   margin-bottom: 1rem;
   color: white;
 }
 
 .card p {
-  font-size: 1.2rem;
+  font-size: 0.85rem;
   margin-bottom: 1rem;
 }
 
 .card button {
-  padding: 0.5rem 1rem;
+
   background-color: #007bff;
   color: #fff;
   border: none;

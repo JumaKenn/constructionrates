@@ -3,21 +3,11 @@ import { Link } from 'react-router-dom';
 
 export const Navigation = (props) => {
   return (
-    <nav id="menu" className="navbar navbar-default navbar-fixed-top">
+    <nav id="menu" className="navbar fixed-top navbar-expand-lg bg-body-tertiary">
       <div className="container">
         <div className="navbar-header">
-          <button
-            type="button"
-            className="navbar-toggle collapsed"
-            data-toggle="collapse"
-            data-target="#bs-example-navbar-collapse-1"
-          >
-            {" "}
-            <span className="sr-only">Toggle navigation</span>{" "}
-            <span className="icon-bar"></span>{" "}
-            <span className="icon-bar"></span>{" "}
-            <span className="icon-bar"></span>{" "}
-          </button>
+
+
           <a className="navbar-brand page-scroll" href="#page-top">
             POSOSTA
           </a>{" "}
@@ -52,8 +42,15 @@ export const Navigation = (props) => {
                 Contact
               </a>
             </li>
+            <li className="navbar-item"><Link to="/login">Sign Up / Register</Link></li>
+            <li className="navbar-item"><Link to="/shop">Manage Shop</Link></li>
+
+
           </ul>
         </div>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1">
+          <span class="navbar-toggler-icon"></span>
+        </button>
       </div>
     </nav>
   );

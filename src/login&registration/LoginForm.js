@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './RegisterForm.css';
-import { useNavigate } from 'react-router-dom';
 
-const RegisterForm = () => {
+import './LoginForm.css'; // Import the CSS file for the LoginForm component
+
+const LoginForm = () => {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://django-server-production-5811.up.railway.app/apis/register/', {
+      const response = await axios.post('https://django-server-production-5811.up.railway.app/apis/login/', {
         username: username,
-        email: email,
         password: password,
       });
-      navigate('/login')
+      navigate('/home')
+
 
       console.log(response.data); // Handle success response
     } catch (error) {
@@ -35,7 +35,8 @@ const RegisterForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleRegister} className="register-form">
+      <form onSubmit={handleLogin} className="login-form">
+        <p> Sign In</p>
         <input
           type="text"
           placeholder="Username"
@@ -43,27 +44,23 @@ const RegisterForm = () => {
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <button type="submit">Login</button>
+
+
       </form>
       {errorMessage && ( // Display error message if it exists
         <div className="error-message">
           {errorMessage}
         </div>
       )}
-    </div>
 
+    </div>
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Card,
     CardImg,
@@ -10,10 +10,27 @@ import {
     Button,
     Row,
     Col,
+
 } from "reactstrap";
 import "./cards.css";
-import Select from 'react-select'
+import Select from 'react-select';
+import Box from '@mui/material/Box';
 
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    font: '24px',
+};
 
 
 
@@ -23,6 +40,24 @@ const Cards = () => {
     const [locationFilter, setLocationFilter] = useState("");
     const [userLocation, setUserLocation] = useState({ latitude: 0, longitude: 0 });
     const [categoryFilter, setCategoryFilter] = useState("");
+    const [searchValue, setSearchValue] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [showSearch, setShowSearch] = useState(true);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState([]);
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => setOpen(false);
+
+    const handleOpen = (product) => {
+        setOpen(true);
+        console.log("product");
+        setSelectedProduct(product);
+
+
+    };
+
+
 
     useEffect(() => {
         // Check if user location exists in local storage
@@ -75,7 +110,7 @@ const Cards = () => {
         }
     };
 
-    const calculateDistance = (latitude1, longitude1, latitude2, longitude2) => {
+    const calculateDistance = (latitude1, longitude1, latitude2, longitude2, decimalPlaces = 2) => {
         const earthRadius = 6371; // Radius of the earth in kilometers
         const latDifference = (latitude2 - latitude1) * (Math.PI / 180);
         const lonDifference = (longitude2 - longitude1) * (Math.PI / 180);
@@ -87,55 +122,64 @@ const Cards = () => {
             Math.sin(lonDifference / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = earthRadius * c;
+        const y = Math.sin(lonDifference) * Math.cos(latitude2);
+        const x =
+            Math.cos(latitude1 * (Math.PI / 180)) * Math.sin(latitude2 * (Math.PI / 180)) -
+            Math.sin(latitude1 * (Math.PI / 180)) * Math.cos(latitude2 * (Math.PI / 180)) * Math.cos(lonDifference);
+        const bearing = (Math.atan2(y, x) * 180) / Math.PI; // Bearing in degrees
 
-        return distance;
+
+
+        return {
+            distance: distance.toFixed(decimalPlaces),
+            bearing: (bearing + 360) % 360 // Normalize the bearing to a positive value between 0 and 360 degrees
+        }
+    };
+    const distance = (location) => {
+        const userLatitude = userLocation.latitude; // User's latitude
+        const userLongitude = userLocation.longitude; // User's longitude
+
+        const [fetchedLatitude, fetchedLongitude] = location.split(",").map(parseFloat);
+        const dist = calculateDistance(userLatitude, userLongitude, fetchedLatitude, fetchedLongitude);
+        const distanc = dist.distance
+
+        return `${distanc} km`;
     };
 
-    const sortProductsByDistance = () => {
-        const sorted = [...filteredProducts].sort((a, b) => {
-            const distanceA = calculateDistance(
-                userLocation.latitude,
-                userLocation.longitude,
-                a.latitude,
-                a.longitude
-            );
-            const distanceB = calculateDistance(
-                userLocation.latitude,
-                userLocation.longitude,
-                b.latitude,
-                b.longitude
-            );
+    const handleMaps = (location) => {
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+        window.open(googleMapsUrl, "_blank");
+    }
+    const sortedProducts = filteredProducts.filter(product => product.category === selectedCategory).sort((productA, productB) => {
+        const distanceA = distance(productA.location);
+        // Calculate distance for product A
+        const distanceB = distance(productB.location);
+        // Calculate distance for product B
+        return distanceA.localeCompare(distanceB, undefined, { numeric: true }); // Sort products based on distance (from nearest to farthest)
+    });
 
-            return distanceA - distanceB;
+    function sortProductsByDistance(filteredProducts) {
+
+
+        filteredProducts.sort((productA, productB) => {
+            const distanceA = distance(productA.location);
+            // Calculate distance for product A
+            const distanceB = distance(productB.location);
+            return distanceA.localeCompare(distanceB, undefined, { numeric: true });
+
         });
 
-        setFilteredProducts(sorted);
-    };
 
-    const categorizeProducts = () => {
-        const categorized = {};
+        return filteredProducts;
+    }
 
-        filteredProducts.forEach((product) => {
-            if (!categorized[product.category]) {
-                categorized[product.category] = [];
-            }
 
-            categorized[product.category].push(product);
-        });
 
-        return categorized;
-    };
+
+
 
     const handleCategoryFilter = (category) => {
-        const categorizedProducts = categorizeProducts();
-
-        if (category === "") {
-            setFilteredProducts(products);
-        } else if (categorizedProducts[category]) {
-            setFilteredProducts(categorizedProducts[category]);
-        } else {
-            setFilteredProducts([]);
-        }
+        setSelectedCategory(category);
     };
     const getUniqueCategories = () => {
         const categories = [...new Set(filteredProducts.map(product => product.category))];
@@ -143,55 +187,278 @@ const Cards = () => {
     };
 
     return (
-        <div className="cardsnew">
-            <div className="sidebar">
-                <div className="top-right">
 
-                    {/* Sort products by distance button */}
-                    <Button className="sort-button" onClick={sortProductsByDistance}>Sort by Distance</Button>
-                </div>
-                <div className="search">
+
+        <div className="cardsnew">
+
+
+            {showSearch && (
+                <div className="searchproducts">
+
+
+
                     <Select
                         isSearchable
-                        placeholder='Search'
+                        options={filteredProducts.map(product => ({ value: product.title, label: product.title }))}
+                        placeholder={searchValue ? searchValue : "Let us help you get what you want faster. Search here..."}
+                        // placeholder='Let us help you get what you want faster. Search here...'
+                        onChange={(selectedOption) => {
+                            // Store the selected search value in the state variable
+                            setSearchValue(selectedOption.value);
+                            setShowSearch(false);
+                        }}
                     />
                 </div>
-            </div>
-            <div className="categories">
-                <ul className="listed">
-                    <h3>Categories</h3>
-                    {getUniqueCategories().map(category => (
-                        <li key={category} onClick={() => handleCategoryFilter(category)}>{category}</li>
-                    ))}
-                </ul>
-            </div>
-            {getUniqueCategories().map(category => (
-                <div className="products" key={category}>
-                    <h1>{category}</h1>
-                    {/* Render filtered products of the current category as cards */}
-                    <Row>
-                        {filteredProducts
-                            .filter(product => product.category === category)
-                            .map((product, index) => (
-                                <Col md="6" lg="3" key={index}>
-                                    <div className="card-image-container">
-                                        <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
-                                    </div>
-                                    <CardBody className="cardfbody">
-                                        <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
-                                        <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
-                                        <CardText className="product-description">{product.description}</CardText>
-                                        <CardText className="product-description">Avg. price: {product.price} KES</CardText>
-                                        <div>
-                                            <Button className="read-more-button">View Suppliers</Button>
-                                        </div>
-                                    </CardBody>
-                                </Col>
+            )}
+
+            {searchValue && (
+                <div>
+                    <div className="sidebar">
+                        <div className="top-right">
+                            <Button className="sort-button" onClick={() => sortProductsByDistance(filteredProducts)}>
+                                Sort by Distance
+                            </Button>
+
+                        </div>
+                        <div className="search">
+                            <Select
+                                isSearchable
+                                options={filteredProducts.map(product => ({ value: product.title, label: product.title }))}
+                                placeholder={searchValue ? searchValue : "Search.."}
+                                // placeholder='Let us help you get what you want faster. Search here...'
+                                onChange={(selectedOption) => {
+                                    // Store the selected search value in the state variable
+                                    setSearchValue(selectedOption.value);
+                                    setSelectedCategory('');
+
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="categories">
+                        <ul className="listed">
+                            <h3>Categories</h3>
+                            {getUniqueCategories().map(category => (
+                                <li className="list-items" key={category} onClick={() => handleCategoryFilter(category)}
+
+                                >{category}</li>
                             ))}
-                    </Row>
+                        </ul>
+                    </div>
+                    {/* Render the selected category */}
+                    {selectedCategory ? (
+                        <div className="products" key={selectedCategory}>
+
+                            <h1>{selectedCategory}</h1>
+                            {/* Render filtered products of the selected category as cards */}
+                            <Row>
+                                {sortedProducts.map((product, index) => (
+                                    <Col md="6" lg="3" key={index}>
+                                        <div className="card-image-container">
+                                            <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
+                                        </div>
+                                        <CardBody className="cardfbody">
+                                            <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
+                                            <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
+                                            <CardText className="product-description">{product.description}</CardText>
+                                            <CardText className="product-description">{distance(product.location)}</CardText>
+
+                                            <CardText className="product-description">Avg. price: {product.price} KES</CardText>
+                                            <div>
+                                                <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+
+                                                <Modal
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    aria-labelledby="modal-modal-title"
+                                                    aria-describedby="modal-modal-description"
+                                                >
+                                                    <Box sx={style}>
+                                                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                                                            {product.title}
+                                                        </Typography>
+                                                        <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                            {product.shop_name}
+                                                        </Typography>
+                                                        <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                            {distance(product.location)}
+                                                        </Typography>
+                                                        <Button onClick={() => handleMaps(product.location)}>Show on Map</Button>
+                                                    </Box>
+                                                </Modal>
+                                            </div>
+
+
+
+                                        </CardBody>
+                                    </Col>
+                                ))}
+
+
+                            </Row>
+                            {/* Render products of other categories */}
+                            {getUniqueCategories()
+                                .filter(category => category !== selectedCategory)
+                                .map(category => (
+                                    <React.Fragment key={category}>
+
+                                        <h1>{category}</h1>
+                                        {/* Render filtered products of the current category as cards */}
+                                        <Row>
+                                            {filteredProducts
+                                                .filter(product => product.category === category)
+                                                .map((product, index) => (
+                                                    <Col md="6" lg="3" key={index}>
+                                                        <div className="card-image-container">
+                                                            <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
+                                                        </div>
+                                                        <CardBody className="cardfbody">
+                                                            <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
+                                                            <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
+                                                            <CardText className="product-description">{product.description}</CardText>
+                                                            <CardText className="product-description">{distance(product.location)}</CardText>
+                                                            <CardText className="product-description">Avg. price: {product.price} KES</CardText>
+                                                            <div>
+                                                                <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+
+                                                                <Modal
+                                                                    open={open}
+                                                                    onClose={handleClose}
+                                                                    aria-labelledby="modal-modal-title"
+                                                                    aria-describedby="modal-modal-description"
+                                                                >
+                                                                    <Box sx={style}>
+                                                                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                                                                            {product.title}
+                                                                        </Typography>
+                                                                        <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                                            {product.shop_name}
+                                                                        </Typography>
+                                                                        <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                                            {distance(product.location)}
+                                                                        </Typography>
+                                                                        <Button onClick={() => handleMaps(product.location)}>Show on Map</Button>
+                                                                    </Box>
+                                                                </Modal>
+                                                            </div>
+                                                        </CardBody>
+                                                    </Col>
+                                                ))}
+
+                                        </Row>
+
+                                    </React.Fragment>
+
+                                ))}
+                        </div>
+
+                    ) : (
+                        <React.Fragment>
+                            {/* Render filtered products of the searched category as cards */}
+                            <div className="productss" key={searchValue}>
+                                <div className="productsearched">
+                                    <Row>
+                                        {filteredProducts
+                                            .filter(product => product.title === searchValue)
+                                            .map((product, index) => (
+                                                <Col md="6" lg="3" key={index}>
+                                                    <div className="card-image-container">
+                                                        <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
+                                                    </div>
+                                                    <CardBody className="cardfbody">
+                                                        <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
+                                                        <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
+                                                        <CardText className="product-description">{product.description}</CardText>
+                                                        <CardText className="product-description">{distance(product.location)}</CardText>
+                                                        <CardText className="product-description">Avg. price: {product.price} KES</CardText>
+                                                        <div>
+                                                            <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+
+                                                            <Modal
+                                                                open={open}
+                                                                onClose={handleClose}
+                                                                aria-labelledby="modal-modal-title"
+                                                                aria-describedby="modal-modal-description"
+                                                            >
+                                                                <Box sx={style}>
+                                                                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                                                                        {product.title}
+                                                                    </Typography>
+                                                                    <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                                        {product.shop_name}
+                                                                    </Typography>
+                                                                    <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                                        {distance(product.location)}
+                                                                    </Typography>
+                                                                    <Button onClick={() => handleMaps(product.location)}>Show on Map</Button>
+                                                                </Box>
+                                                            </Modal>
+                                                        </div>
+                                                    </CardBody>
+                                                </Col>
+                                            ))}
+
+                                    </Row>
+                                </div>
+                            </div>
+                            {getUniqueCategories().map(category => (
+                                <div className="products" key={category}>
+                                    <h1>{category}</h1>
+                                    {/* Render filtered products of the current category as cards */}
+                                    <Row>
+                                        {filteredProducts
+                                            .filter(product => product.category === category)
+                                            .map((product, index) => (
+                                                <Col md="6" lg="3" key={index}>
+                                                    <div className="card-image-container">
+                                                        <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
+                                                    </div>
+                                                    <CardBody className="cardfbody">
+                                                        <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
+                                                        <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
+                                                        <CardText className="product-description">{product.description}</CardText>
+                                                        <CardText className="product-description">{distance(product.location)}</CardText>
+                                                        <CardText className="product-description">Avg. price: {product.price} KES</CardText>
+                                                        <div>
+                                                            <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+
+                                                            <Modal
+                                                                open={open}
+                                                                onClose={handleClose}
+                                                                aria-labelledby="modal-modal-title"
+                                                                aria-describedby="modal-modal-description"
+                                                            >
+                                                                <Box sx={style}>
+                                                                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                                                                        {product.title}
+                                                                    </Typography>
+                                                                    <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                                        {product.shop_name}
+                                                                    </Typography>
+                                                                    <Typography id="modal-modal-description" sx={{ fontSize: '20px' }}>
+                                                                        {distance(product.location)}
+                                                                    </Typography>
+                                                                    <Button onClick={() => handleMaps(product.location)}>Show on Map</Button>
+                                                                </Box>
+                                                            </Modal>
+                                                        </div>
+                                                    </CardBody>
+                                                </Col>
+                                            ))}
+
+                                    </Row>
+                                </div>
+
+                            ))}
+                        </React.Fragment>
+                    )}
+
+
                 </div>
-            ))}
-        </div>
+            )
+            }
+        </div >
+
     );
 }
 

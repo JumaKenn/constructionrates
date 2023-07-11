@@ -1,8 +1,47 @@
 .cardsnew {
-    background: url("assets/images/bg/download.jpg");
-    
-    height: 200vh;
-    
+  background: url("assets/images/bg/download.jpg");
+
+  height: 200vh;
+
+
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .cardsnew {
+    flex-basis: 48%;
+    height: 500vh;
+  }
+
+  .searchproducts {
+    width: 80%;
+    align-items: center;
+
+    padding-left: 40px;
+
+
+  }
+
+
+}
+
+.searchproducts {
+  align-items: center;
+  background: ;
+  width: 90%;
+  padding-left: 100px;
+  padding-top: 200px;
+
+
+}
+
+
+
+.suppliers::after {
+  align-items: center;
+  background: ;
+
+
 }
 
 .sidebar {
@@ -10,6 +49,7 @@
   background-color: #f2f2f2;
   padding: 20px;
 }
+
 .categories {
   width: 250px;
   background-color: #f2f2f2;
@@ -18,125 +58,138 @@
 
 
 .products {
-   
-    flex-direction: column;
-    align-items: center;
-    margin-top: -250px;
-    padding-left: 300px;
-  }
-  /* .button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: -50px;
-    color: blue;
-    padding-right:1000px;
-    padding-left: -200px;
-  }
-  .search {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: -50px;
-    margin-bottom: 50px;
-    
-    padding-right:260px;
-    padding-left: -400px;
-  } */
-  .top-right {
-    display: flex;
-    flex-direction: left;
-    align-items: center;
-    margin-top: 100px;
-    color: blue;
-    padding-right:1000px;
-    padding-left: -200px;
-  }
-  /* .top-right {
+
+  flex-direction: column;
+  align-items: center;
+  margin-top: -250px;
+  padding-left: 300px;
+}
+
+.productsearched {
+  flex-direction: column;
+  align-items: center;
+  margin-top: -250px;
+  padding-bottom: 280px;
+  padding-left: 300px;
+}
+
+
+
+
+.top-right {
+  display: flex;
+  flex-direction: left;
+  align-items: center;
+  margin-top: 100px;
+  color: blue;
+  padding-right: 1000px;
+  padding-left: -200px;
+}
+
+/* .top-right {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
   } */
-  
-  .category-select {
-    padding: 5px;
-  }
-  
-  .sort-button {
-    margin-bottom: 10px;
-  }
-  
-  .card {
-    width: 200px;
-    margin-bottom: 20px;
-  }
 
-  /* Additional styles for responsiveness */
-  @media (min-width: 576px) {
-    .card {
-      flex-basis: 48%;
-    }
+.category-select {
+  padding: 5px;
+}
+
+.sort-button {
+  margin-bottom: 10px;
+}
+
+.card {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+/* Additional styles for responsiveness */
+@media (min-width: 576px) {
+  .cardsnew {
+    flex-basis: 48%;
   }
-  
-  @media (min-width: 992px) {
-    .card {
-      flex-basis: 23%;
-    }
+}
+
+@media (min-width: 992px) {
+  .cardsnew {
+    flex-basis: 23%;
   }
-  .card-image-container {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .img {
-    
-    height: auto;
-    background-color: white;
-    width: 200px;
-    height: 200px;
-  }
-  .product-description {
-    width: 100%;
-    height: auto;
-    color: white;
-  }
-  
-  
-  .product-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-  }
-  
-  .mb-2 {
-    margin-bottom: 2rem;
-  }
-  .cardfbody {
-    background-color: ;
-    position: relative;
-    height: auto;
-    
-  }
-  
-  .text-muted {
-    color: white;
-    font-weight: bold;
-  }
-  
-  .product-description {
-    font-size: 14px;
-    color: white;
-  }
-  
-  .read-more-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .read-more-button:hover {
-    background-color: #0056b3;
-  }
+}
+
+.listed {
+  cursor: pointer;
+}
+
+
+
+.list-items:hover {
+  font-style: italic;
+
+}
+
+.card-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.img {
+
+  height: auto;
+  background-color: white;
+  width: 200px;
+  height: 200px;
+}
+
+.product-description {
+  width: 100%;
+  height: auto;
+  color: white;
+}
+
+
+.product-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.cardfbody {
+  background-color: ;
+  position: relative;
+  height: auto;
+
+}
+
+.text-muted {
+  color: white;
+  font-weight: bold;
+}
+
+.product-description {
+  font-size: 14px;
+  color: white;
+}
+
+.modal-modal-description {
+  font-size: 24px;
+  color: blue;
+}
+
+.read-more-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.read-more-button:hover {
+  background-color: #0056b3;
+}
