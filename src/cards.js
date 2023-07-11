@@ -18,7 +18,7 @@ import Box from '@mui/material/Box';
 
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { API_ENDPOINT_1 } from '../apis/api';
+import { API_ENDPOINT_1 } from './apis/api';
 
 const style = {
     position: 'absolute',
