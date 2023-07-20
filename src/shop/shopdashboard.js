@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Topbar from './scenes/global/Topbar';
 import SideBar from './scenes/global/Sidebar';
 import Dashboard from './scenes/dashboard';
+// import MarketPlace from '../MarketPlace';
 import Team from './scenes/team';
 import Contacts from './scenes/contacts';
 import { CssBaseline, ThemeProvider } from '@mui/material';
@@ -15,7 +16,7 @@ import { API_ENDPOINT_1 } from '../apis/api';
 
 function ShopDashboard() {
     const { isLoggedIn, user } = useContext(AuthContext);
-    const [hasShop, setHasShop] = useState(false);
+
     const [isLoading, setIsLoading] = useState(true);
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
@@ -30,33 +31,50 @@ function ShopDashboard() {
             try {
                 // Make API call to check if the logged-in user has a shop
                 const response = await axios.get(`${API_ENDPOINT_1}/apis/checkshop/${user.username}`);
-                setHasShop(response.data.hasShop);
+
+
+                console.log(response.data);
+                console.log('that above is the response');
+                const hasShop = response.data.exists; // Assuming the response contains a key 'exists' indicating if the shop exists
+
+
                 console.log('done fetching');
+                console.log(hasShop)
+
                 setIsLoading(false);
+                return hasShop;
             } catch (error) {
                 console.log('Error checking shop:', error);
                 setIsLoading(false);
+                return false;
             }
+
         };
 
         const checkShopAndRedirect = async () => {
             if (isLoggedIn) {
                 console.log(user.username);
-                await fetchShop();
-                handleRedirect();
+                const hasShop = fetchShop();
+                handleRedirect(hasShop);
             } else {
                 // Redirect user if not logged in
                 login();
             }
         };
 
-        const handleRedirect = () => {
+        const handleRedirect = (hasShop) => {
+            console.log(hasShop);
             if (!hasShop) {
                 // Redirect user if they don't have a shop
                 setIsLoading(false);
+                console.log('why?');
 
                 navigate('/entry');
             }
+            else {
+                console.log('whattodo');
+            }
+
         };
 
         checkShopAndRedirect();
@@ -76,9 +94,9 @@ function ShopDashboard() {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <div className="notapp">
-                    <SideBar isSidebar={isSidebar} />
+
                     <main className="content">
-                        <Topbar setIsSidebar={setIsSidebar} />
+
                         <Routes>
                             <Route path="/" element={<Dashboard />} />
                             <Route path="/team" element={<Team />} />

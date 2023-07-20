@@ -49,13 +49,14 @@ const Register = () => {
     // Reset password match error when password is changed
     setPasswordMatchError(false);
   };
-
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     if (password !== confirmPassword) {
+      console.log(password);
+      console.log(confirmPassword);
+      console.log('passwords do not match');
       setPasswordMatchError(true);
 
-      return;
 
     }
     else {

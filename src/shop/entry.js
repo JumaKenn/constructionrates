@@ -28,26 +28,24 @@ const Textarea = ({ label, id, ...rest }) => (
     </div>
 );
 
+
+
 const CreateShopPage = () => {
     const [shopName, setShopName] = useState('');
     const [shopLocation, setShopLocation] = useState('');
     const [shopPhoneNo, setShopPhoneNo] = useState('');
     const [shopEmail, setShopEmail] = useState('');
-    const { user } = useContext(AuthContext);
+    const { user, shopname, setShopname } = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleCreateShop = async (values, options, e) => {
 
-        // Perform shop creation logic here
-        // You can access the entered shop details using the state variables
-        console.log('Shop Name:', shopName);
-        console.log('Shop Location:', shopLocation);
-        console.log('Shop Phone Number:', shopPhoneNo);
-        console.log('Shop Email:', shopEmail);
-        console.log('user:', user.username);
+
 
         try {
-            const shop = {
+
+
+            const response = await axios.post(`${API_ENDPOINT_1}/apis/createshop/`, {
 
                 shop_owner: user.username,
                 shopname: shopName,
@@ -55,11 +53,8 @@ const CreateShopPage = () => {
                 phone_no: shopPhoneNo,
                 email: shopEmail,
 
-            };
-
-            console.log(shop);
-
-            const response = await axios.post(`${API_ENDPOINT_1}/apis/createshop/`, { shop });
+            });
+            setShopname(shopName);
 
             console.log(response.data); // Handle success response
         } catch (error) {

@@ -5,12 +5,14 @@ import { useState, useEffect } from 'react';
 import { FaArrowAltCircleUp } from 'react-icons/fa';
 import cloudinary from 'cloudinary-core';
 import Axios from "axios";
+import { API_ENDPOINT_1 } from './apis/api';
 
 
 const MarketPlace = () => {
   const [showForm, setShowForm] = useState(false);
   const [itemName, setItemName] = useState('');
   const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [components, setComponents] = useState([]);
@@ -37,7 +39,10 @@ const MarketPlace = () => {
       setPrice(value);
     } else if (name === 'quantity') {
       setQuantity(value);
+    } else if (name === 'category') {
+      setCategory(value);
     }
+
   };
 
   const handleDelete = (index) => {
@@ -72,6 +77,7 @@ const MarketPlace = () => {
       description,
       price,
       quantity,
+      category,
       image: event.target.picture.files[0], // Access the uploaded image file
     };
 
@@ -128,6 +134,8 @@ const MarketPlace = () => {
         const product = {
           title: component.itemName,
           description: component.description,
+          subtitle: 'per bag',
+          category: component.category,
           price: component.price,
           quantity: component.quantity,
           image_url: imageUrl, // Use the Cloudinary image URL
@@ -139,7 +147,7 @@ const MarketPlace = () => {
       }
 
       // Send the products data to the API endpoint as JSON
-      const response = await fetch('http://127.0.0.1:8000/apis/products/', {
+      const response = await fetch(`${API_ENDPOINT_1}/apis/products/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -190,10 +198,10 @@ const MarketPlace = () => {
 
 
 
-            <button className="back-btn" onClick={() => setShowForm(false)}>Close</button>
+
             <br />
 
-            <label>
+            <label className='labelformarket'>
               Item Name:
               <input
                 type="text"
@@ -205,7 +213,19 @@ const MarketPlace = () => {
               />
             </label>
             <br />
-            <label>
+            <label className='labelformarket'>
+              Category:
+              <input
+                type="text"
+                name="category"
+                value={category}
+                onChange={handleInputChange}
+                className="form-input"
+                required
+              />
+            </label>
+            <br />
+            <label className='labelformarket'>
               Description:
               <textarea
                 name="description"
@@ -216,7 +236,7 @@ const MarketPlace = () => {
               />
             </label>
             <br />
-            <label>
+            <label className='labelformarket'>
               Price:
               <input
                 type="number"
@@ -228,7 +248,7 @@ const MarketPlace = () => {
               />
             </label>
             <br />
-            <label>
+            <label className='labelformarket'>
               Quantity:
               <input
                 type="number"
@@ -240,7 +260,7 @@ const MarketPlace = () => {
               />
             </label>
             <br />
-            <label>
+            <label className='labelformarket'>
               Picture:
               <input
                 type="file"
@@ -261,7 +281,7 @@ const MarketPlace = () => {
         </div>
       )}
       <div className="component-list-container">
-        <h2>Added Items:</h2>
+        <h2 className='header2tag'>Added Items:</h2>
         {components.map((component, index) => (
           <div key={index} className="component-entry">
             <span className="counter">{index + 1}. </span>
@@ -270,9 +290,7 @@ const MarketPlace = () => {
             <span className="quantity">Quantity: {component.quantity}</span>
             <button className="list-button" onClick={() => handleDelete(index)}>Delete</button>
             <button className="list-button2" onClick={() => handleView(index)}>View</button>
-            <button className="list-button3" onClick={handleAllComponentsSubmitToEndpoint} disabled={loading}>
-              {loading ? 'Loading...' : 'Push to Marketplace'}
-            </button>
+
 
           </div>
         ))}
@@ -290,6 +308,9 @@ const MarketPlace = () => {
             </button>
           </div>
         )}
+        <button className="list-button3" onClick={handleAllComponentsSubmitToEndpoint} disabled={loading}>
+          {loading ? 'Loading...' : 'Push to Marketplace'}
+        </button>
       </div>
 
     </div>

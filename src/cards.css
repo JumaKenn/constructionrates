@@ -1,8 +1,8 @@
 .cardsnew {
   background: url("assets/images/bg/download.jpg");
 
-  height: 200vh;
-
+  min-height: 100vh;
+  margin-top: -50px;
 
   position: relative;
 }
@@ -63,6 +63,7 @@
   align-items: center;
   margin-top: -250px;
   padding-left: 300px;
+  padding-bottom: 280px;
 }
 
 .productsearched {
@@ -86,11 +87,6 @@
   padding-left: -200px;
 }
 
-/* .top-right {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-  } */
 
 .category-select {
   padding: 5px;
