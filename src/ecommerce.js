@@ -10,6 +10,7 @@ const ItemComponent = () => {
         section2: ['item4', 'item5', 'item6'],
     };
 
+
     useEffect(() => {
         // Fetch data from the API endpoint
         fetch('http://127.0.0.1:8000/apis/ecommerce/')

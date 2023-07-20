@@ -197,7 +197,7 @@ function ComponentSearch() {
           {loading && <p>Loading...</p>}
           {
             rate !== null && (
-              <p>
+              <p className="ptag">
                 The {selectedRatetype} for {selectedComponent} is{" "}
                 <span className="underline-text">{rate.toFixed(2)}</span> KES
               </p>

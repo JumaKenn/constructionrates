@@ -22,7 +22,9 @@
   cursor: pointer;
 }
 
-
+.reg-item {
+  padding: 10px;
+}
 
 .error-message {
   color: #4CAF50;

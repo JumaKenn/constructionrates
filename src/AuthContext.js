@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 // Create the AuthProvider component
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [shopname, setShopname] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // Function to handle user login
@@ -13,6 +14,9 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
         setIsLoggedIn(true);
     };
+    const shopnae = (passedin) => {
+        setShopname(passedin);
+    }
 
     // Function to handle user logout
     const logout = () => {
@@ -23,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     // Provide the user and login/logout functions to the child components
     const authContextValue = {
         user,
+        shopname,
         isLoggedIn,
         login,
         logout,
