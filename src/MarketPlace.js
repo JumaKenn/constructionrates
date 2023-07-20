@@ -1,12 +1,12 @@
 
 import './MarketPlace.css'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FaArrowAltCircleUp } from 'react-icons/fa';
 import cloudinary from 'cloudinary-core';
 import Axios from "axios";
 import { API_ENDPOINT_1 } from './apis/api';
-
+import { AuthContext } from './AuthContext';
 
 const MarketPlace = () => {
   const [showForm, setShowForm] = useState(false);
@@ -19,6 +19,7 @@ const MarketPlace = () => {
   const [viewingComponent, setViewingComponent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageurl] = useState('');
+  const { user } = useContext(AuthContext);
 
 
   useEffect(() => {
@@ -101,57 +102,51 @@ const MarketPlace = () => {
 
   const handleAllComponentsSubmitToEndpoint = async () => {
     try {
-      // Display a loading state to the user
-      setLoading(true);
-
-
-      // Create an array to store the product data
-      const products = [];
+      setLoading(true); // Display a loading state to the user
 
       // Convert the components data to product format
-      for (const component of components) {
-        // Upload the image to Cloudinary
-        const formData = new FormData();
-        formData.append("file", component.image);
-        formData.append("upload_preset", "a5bkfjiv");
+      const products = await Promise.all(
+        components.map(async (component) => {
+          try {
+            // Upload the image to Cloudinary
+            const formData = new FormData();
+            formData.append("file", component.image);
+            formData.append("upload_preset", "a5bkfjiv");
 
-        Axios.post(
-          "https://api.cloudinary.com/v1_1/dzac7jcg9/image/upload",
-          formData
-        )
-          .then((response) => {
+            const response = await Axios.post(
+              "https://api.cloudinary.com/v1_1/dzac7jcg9/image/upload",
+              formData
+            );
+
+            // Handle the image upload response
             console.log(response);
             setImageurl(response.data.secure_url);
             console.log(response.data.secure_url);
-          })
-          .catch((error) => {
+
+            const product = {
+              title: component.itemName,
+              description: component.description,
+              subtitle: 'per bag',
+              category: component.category,
+              price: component.price,
+              quantity: component.quantity,
+              image_url: response.data.secure_url, // Use the Cloudinary image URL
+            };
+            return product;
+          } catch (error) {
             console.log(error);
-          });
+            throw new Error("Failed to upload image");
+          }
+        })
+      );
 
-
-
-        // Create a new product object with the image URL
-        const product = {
-          title: component.itemName,
-          description: component.description,
-          subtitle: 'per bag',
-          category: component.category,
-          price: component.price,
-          quantity: component.quantity,
-          image_url: imageUrl, // Use the Cloudinary image URL
-        };
-        console.log(product);
-
-        // Add the product to the array
-        products.push(product);
-      }
+      console.log(products); // This will show you the array of products with uploaded image URLs
 
       // Send the products data to the API endpoint as JSON
-      const response = await fetch(`${API_ENDPOINT_1}/apis/products/`, {
+      const response = await fetch(`${API_ENDPOINT_1}/apis/products/${user.username}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-
         },
         body: JSON.stringify(products),
       });
@@ -175,7 +170,6 @@ const MarketPlace = () => {
       setLoading(false);
     }
   };
-
   if (loading) {
     // Display loading indicator while data is being fetched
     return <div>Loading...</div>;

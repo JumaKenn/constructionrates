@@ -1,10 +1,11 @@
 /* rates.css */
 
 /* Styles for form inputs */
-.Rates{
+.Rates {
   margin-bottom: 200px;
-  margin-top:150px
+  margin-top: 150px
 }
+
 .rates-form {
   width: 300px;
   margin: 0 auto;
@@ -12,94 +13,98 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  
-  
-}
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-    color: white;
-    font-weight: bold;
-  }
-  select option {
-    background-color: #ccc;
-    font-size: 2rem;
-  }
-  
-  select,
-  input[type="number"] {
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  
-  select:focus,
-  input[type="number"]:focus {
-    outline: none;
-    border-color: #4d90fe;
-  }
-  
-  /* Styles for form button */
-  button {
-    background-color: #4d90fe;
-    color: #fff;
-    border: none;
-    border-radius: 0.25rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  button:hover {
-    background-color: #357ae8;
-  }
-  
-  /* Styles for loading message */
-  p.loading {
-    font-size: 1rem;
-    font-style: italic;
-  }
-  
-  /* Styles for rate message */
-  p.rate {
-    font-size: 5rem;
-    font-weight: bold;
-    margin-top: 1rem;
-  }
-  /* Styles for components */
-.component-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-.component {
-    padding: 1rem;
-    margin: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-    flex: 1 1 calc(33.33% - 2rem);
-    text-align: center;
-    color: black;
-  }
-  
-.component:hover {
-    background-color: #f5f5f5;
-    cursor: pointer;
-  }
-.underline-text {
-    text-decoration: underline;
-    color: white;
-  
-  }
 
-  .ptag {
-    
-    color: white;
-    font-size: 3rem;
-  
-  }
+
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  color: white;
+  font-weight: bold;
+}
+
+select option {
+  background-color: #ccc;
+  font-size: 2rem;
+}
+
+select,
+input[type="number"] {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+select:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #4d90fe;
+}
+
+/* Styles for form button */
+button {
+  background-color: #4d90fe;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #357ae8;
+}
+
+/* Styles for loading message */
+p.loading {
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Styles for rate message */
+p.rate {
+  font-size: 5rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Styles for components */
+.component-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.component {
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  flex: 1 1 calc(33.33% - 2rem);
+  text-align: center;
+  color: black;
+}
+
+.component:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.underline-text {
+  text-decoration: underline;
+  color: white;
+
+}
+
+.ptag {
+
+  color: white;
+  font-size: 3rem;
+
+}
