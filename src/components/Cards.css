@@ -9,14 +9,14 @@
 @media screen and (max-width: 768px) {
   /* Change padding to make it responsive */
   .cards {
-    padding-left: 50px;
+    padding-left: 0px;
   }
 }
 
 @media screen and (max-width: 480px) {
   /* Further adjustments for smaller screens */
   .cards {
-    padding-left: 20px;
+    padding-left: 0px;
     flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
   }
 }
