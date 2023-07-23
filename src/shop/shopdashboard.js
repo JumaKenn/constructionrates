@@ -86,7 +86,7 @@ function ShopDashboard() {
                 navigate('/entry');
             }
             else {
-                console.log('whattodo');
+                console.log('hashop, passes and executes return below');
             }
 
         };

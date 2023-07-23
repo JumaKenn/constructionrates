@@ -55,12 +55,12 @@ const Register = () => {
       console.log(password);
       console.log(confirmPassword);
       console.log('passwords do not match');
-      setPasswordMatchError(true);
+      setPasswordMatchError(false);
 
 
     }
     else {
-      setPasswordMatchError(false);
+      setPasswordMatchError(true);
 
     }
 
@@ -87,6 +87,7 @@ const Register = () => {
               <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='formControlLg' type='password' size='lg' onChange={handleConfirmPasswordChange} />
 
               {passwordMatchError && <p className='link-danger'>Passwords do not match.</p>}
+              <p className='error-message'>{errorMessage}</p>
 
 
 
