@@ -15,7 +15,7 @@ import CreateShopPage from './entry';
 import { API_ENDPOINT_1 } from '../apis/api';
 
 function ShopDashboard() {
-    const { isLoggedIn, user } = useContext(AuthContext);
+    const { isLoggedIn, user, token, login } = useContext(AuthContext);
 
     const [isLoading, setIsLoading] = useState(true);
     const [theme, colorMode] = useMode();
@@ -27,10 +27,15 @@ function ShopDashboard() {
             navigate('/login');
         };
 
-        const fetchShop = async () => {
+        const fetchShop = async (username, tokenizer) => {
             try {
                 // Make API call to check if the logged-in user has a shop
-                const response = await axios.get(`${API_ENDPOINT_1}/apis/checkshop/${user.username}`);
+                const response = await axios.get(`${API_ENDPOINT_1}/apis/checkshop/${username}`,
+                    {
+                        headers: {
+                            Authorization: `Token ${tokenizer}`, // Include the token in the headers
+                        },
+                    });
 
 
                 console.log(response.data);
@@ -52,11 +57,20 @@ function ShopDashboard() {
         };
 
         const checkShopAndRedirect = async () => {
-            if (isLoggedIn) {
-                console.log(user.username);
-                const hasShop = fetchShop();
-                handleRedirect(hasShop);
-            } else {
+            const username = localStorage.getItem('user');
+            if (username != null) {
+           
+            const username = localStorage.getItem('user');
+            console.log(username);
+            const tokenizer = localStorage.getItem('auth_token');
+            // login(username, tokenizer);
+            const hasShop = fetchShop(username, tokenizer);
+            handleRedirect(hasShop);
+            }
+
+        
+            else {
+                console.log('tokens what?');
                 // Redirect user if not logged in
                 login();
             }
@@ -76,6 +90,7 @@ function ShopDashboard() {
             }
 
         };
+
 
         checkShopAndRedirect();
 

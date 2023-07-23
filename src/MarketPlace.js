@@ -7,6 +7,7 @@ import cloudinary from 'cloudinary-core';
 import Axios from "axios";
 import { API_ENDPOINT_1 } from './apis/api';
 import { AuthContext } from './AuthContext';
+import Select from 'react-select';
 
 const MarketPlace = () => {
   const [showForm, setShowForm] = useState(false);
@@ -19,16 +20,42 @@ const MarketPlace = () => {
   const [viewingComponent, setViewingComponent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageurl] = useState('');
-  const { user } = useContext(AuthContext);
-
+  const [categories, setCategories] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  // const { user } = useContext(AuthContext);
+  const user = localStorage.getItem('user');
+            
+  const tokenizer = localStorage.getItem('auth_token');
 
   useEffect(() => {
     // Retrieve components from local storage on component mount
+
     const storedComponents = localStorage.getItem('components');
     if (storedComponents) {
       setComponents(JSON.parse(storedComponents));
     }
   }, []);
+  useEffect(() => {
+        // Fetch data from the API endpoint
+        fetch(`${API_ENDPOINT_1}/apis/categories/`)
+            .then(response => response.json())
+
+            .then(result => {
+                setCategories(result);
+                console.log(result);
+
+                // setLoading(false); // Set loading to false after data is fetched
+            });
+    }, []);
+   
+  const handleReload = () => {
+    // Reload the page
+    window.location.reload();
+  };
+ 
+  const handleSelectedCategory = (selectedOption) => {
+    setCategory(selectedOption);
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -40,9 +67,7 @@ const MarketPlace = () => {
       setPrice(value);
     } else if (name === 'quantity') {
       setQuantity(value);
-    } else if (name === 'category') {
-      setCategory(value);
-    }
+    } 
 
   };
 
@@ -130,7 +155,7 @@ const MarketPlace = () => {
               category: component.category,
               price: component.price,
               quantity: component.quantity,
-              image_url: response.data.secure_url, // Use the Cloudinary image URL
+              image: response.data.secure_url, // Use the Cloudinary image URL
             };
             return product;
           } catch (error) {
@@ -143,7 +168,7 @@ const MarketPlace = () => {
       console.log(products); // This will show you the array of products with uploaded image URLs
 
       // Send the products data to the API endpoint as JSON
-      const response = await fetch(`${API_ENDPOINT_1}/apis/products/${user.username}/`, {
+      const response = await fetch(`${API_ENDPOINT_1}/apis/products/${user}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -159,6 +184,7 @@ const MarketPlace = () => {
 
         // Display a success message to the user
         alert('Products added successfully!');
+        handleReload();
       } else {
         // Display an error message to the user
         alert('Failed to add products.');
@@ -174,6 +200,7 @@ const MarketPlace = () => {
     // Display loading indicator while data is being fetched
     return <div>Loading...</div>;
   }
+
 
 
   return (
@@ -209,14 +236,23 @@ const MarketPlace = () => {
             <br />
             <label className='labelformarket'>
               Category:
-              <input
-                type="text"
-                name="category"
-                value={category}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
+              
+               <Select className="selectcategory"
+                                isSearchable
+
+                                options={categories.map(category => ({ value: category, label: category}))}
+                                placeholder={searchValue ? searchValue : "Search.."}
+                               
+                                onChange={(selectedOption) => {
+                                    // Store the selected search value in the state variable
+                                    setSearchValue(selectedOption.value);
+                                    handleSelectedCategory(selectedOption);
+
+                                }}
+                                required
+                            />
+
+              
             </label>
             <br />
             <label className='labelformarket'>

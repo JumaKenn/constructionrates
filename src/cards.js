@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
     Card,
     CardImg,
@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { API_ENDPOINT_1 } from './apis/api';
+import { AuthContext } from './AuthContext';
 
 const style = {
     position: 'absolute',
@@ -36,6 +37,7 @@ const style = {
 
 
 const Cards = () => {
+    const { user } = useContext(AuthContext);
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [locationFilter, setLocationFilter] = useState("");
@@ -86,8 +88,9 @@ const Cards = () => {
     }, []);
 
     useEffect(() => {
+        const username = 'none';
         // Fetch data from the API and set the products state
-        fetch(`${API_ENDPOINT_1}/apis/ecommerce/`)
+        fetch(`${API_ENDPOINT_1}/apis/ecommerce/${username}/`)
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);

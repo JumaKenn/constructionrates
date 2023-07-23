@@ -16,16 +16,19 @@ import MarketPlace from "../../../MarketPlace";
 import { API_ENDPOINT_1 } from "../../../apis/api";
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from '../../../AuthContext';
-
+import './index.css';
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
+  const user = localStorage.getItem('user');
+            
+  const tokenizer = localStorage.getItem('auth_token');
   useEffect(() => {
     // Fetch data from the API endpoint
-    fetch(`${API_ENDPOINT_1}/apis/ecommerce/${user.username}`)
+    fetch(`${API_ENDPOINT_1}/apis/ecommerce/${user}`)
       .then(response => response.json())
 
       .then(result => {
@@ -118,7 +121,7 @@ const Dashboard = () => {
                   <td style={{ borderBottom: '1px solid', padding: '8px' }}>{product.price}</td>
                   <td style={{ borderBottom: '1px solid', padding: '8px' }}>{product.quantity}</td>
                   <td style={{ borderBottom: '1px solid', padding: '8px' }}>
-                    <img src={product.image} alt="Product" />
+                    <img className='img' src={product.image} alt="Product" />
                   </td>
                 </tr>
               ))}

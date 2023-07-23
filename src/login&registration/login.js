@@ -14,7 +14,7 @@ function LoginRegistrationPage() {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
-    const { user, isLoggedIn, login, logout } = useContext(AuthContext);
+    const { user, isLoggedIn, login, logout, setToken } = useContext(AuthContext);
 
 
     const handleJustifyClick = (value) => {
@@ -33,7 +33,11 @@ function LoginRegistrationPage() {
                 username: username,
                 password: password,
             });
-            login({ username: username });
+            const token = response.data.token; // Assuming the token key is 'token' in the response
+
+            // Save the token to the AuthContext
+            
+            login(username, token);
             navigate('/')
 
 
