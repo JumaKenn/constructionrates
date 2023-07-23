@@ -50,7 +50,7 @@ const MarketPlace = () => {
    
   const handleReload = () => {
     // Reload the page
-    window.location.reload();
+    window.location.reload(false);
   };
  
   const handleSelectedCategory = (selectedOption) => {

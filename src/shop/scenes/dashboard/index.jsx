@@ -44,8 +44,8 @@ const Dashboard = () => {
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your online market" />
-        <Box m="20px">
-            <h1>{shopname}</h1>
+        <Box fontstyle="italic" m="20px">
+            <p>{shopname}</p>
           </Box>
 
 
