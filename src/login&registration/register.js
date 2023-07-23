@@ -39,7 +39,7 @@ const Register = () => {
         setErrorMessage(error.response.data.message); // Store error message in state
       } else {
         console.log('An error occurred:', error.message); // Handle generic error
-        setErrorMessage('An error occurred. Please try again.'); // Store generic error message in state
+        setErrorMessage(error.message); // Store generic error message in state
       }
     }
   };

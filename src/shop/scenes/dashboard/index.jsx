@@ -26,6 +26,7 @@ const Dashboard = () => {
   const user = localStorage.getItem('user');
             
   const tokenizer = localStorage.getItem('auth_token');
+  const shopname  = localStorage.getItem('shopname');
   useEffect(() => {
     // Fetch data from the API endpoint
     fetch(`${API_ENDPOINT_1}/apis/ecommerce/${user}`)
@@ -43,6 +44,9 @@ const Dashboard = () => {
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your online market" />
+        <Box m="20px">
+            <h1>{shopname}</h1>
+          </Box>
 
 
       </Box>

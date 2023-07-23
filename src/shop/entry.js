@@ -2,8 +2,10 @@ import React, { useState, useContext } from 'react';
 import { useForm } from "react-cool-form";
 import { AuthContext } from '../AuthContext';
 import axios from 'axios';
-import './entry.css';
+
+import { useNavigate } from 'react-router-dom';
 import { API_ENDPOINT_1 } from '../apis/api';
+import './entry.css';
 
 const Field = ({ label, id, ...rest }) => (
     <div className="form-field">
@@ -37,6 +39,8 @@ const CreateShopPage = () => {
     const [shopEmail, setShopEmail] = useState('');
     const { user, shopname, setShopname } = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
+    const username = localStorage.getItem('user');
 
     const handleCreateShop = async (values, options, e) => {
 
@@ -47,14 +51,16 @@ const CreateShopPage = () => {
 
             const response = await axios.post(`${API_ENDPOINT_1}/apis/createshop/`, {
 
-                shop_owner: user.username,
+                shop_owner: username,
                 shopname: shopName,
                 location: shopLocation,
                 phone_no: shopPhoneNo,
                 email: shopEmail,
 
             });
-            setShopname(shopName);
+            
+            localStorage.setItem('shopname',shopName);
+            navigate('/shop');
 
             console.log(response.data); // Handle success response
         } catch (error) {
@@ -80,7 +86,8 @@ const CreateShopPage = () => {
 
     return (
         <div className="create-shop-page">
-            <h1>Create Shop</h1>
+        <h3>Seems you don't have a shop yet. Create one by filling in the form below|\|/|</h3>
+            <h1>------------------------------------------------------------------</h1>
             <form ref={form} noValidate onSubmit={handleCreateShop}>
                 <Field label="Shop Name" id="shop-name" name="shopName" value={shopName} onChange={(e) => setShopName(e.target.value)} />
                 <Field label="Shop Location" id="shop-location" name="shopLocation" value={shopLocation} onChange={(e) => setShopLocation(e.target.value)} />

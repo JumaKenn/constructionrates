@@ -246,7 +246,7 @@ const MarketPlace = () => {
                                 onChange={(selectedOption) => {
                                     // Store the selected search value in the state variable
                                     setSearchValue(selectedOption.value);
-                                    handleSelectedCategory(selectedOption);
+                                    handleSelectedCategory(selectedOption.value);
 
                                 }}
                                 required

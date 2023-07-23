@@ -38,9 +38,10 @@ function ShopDashboard() {
                     });
 
 
-                console.log(response.data);
+                console.log(response);
                 console.log('that above is the response');
-                const hasShop = response.data.exists; // Assuming the response contains a key 'exists' indicating if the shop exists
+                const hasShop = response.data.exists;
+                const shopname = localStorage.setItem('shopname',response.data.shopname);
 
 
                 console.log('done fetching');
@@ -56,33 +57,34 @@ function ShopDashboard() {
 
         };
 
+       
         const checkShopAndRedirect = async () => {
-            const username = localStorage.getItem('user');
-            if (username != null) {
-           
-            const username = localStorage.getItem('user');
-            console.log(username);
+          const username = localStorage.getItem('user');
+          if (username != null) {
             const tokenizer = localStorage.getItem('auth_token');
-            // login(username, tokenizer);
-            const hasShop = fetchShop(username, tokenizer);
-            handleRedirect(hasShop);
+            try {
+              const hasShop = await fetchShop(username, tokenizer);
+              handleRedirect(hasShop);
+            } catch (error) {
+              console.log('Error checking shop:', error);
+              // Redirect user if there's an error
+              login();
             }
+          } else {
+           
+            login();
+          }
+        };
+
 
         
-            else {
-                console.log('tokens what?');
-                // Redirect user if not logged in
-                login();
-            }
-        };
+            
 
         const handleRedirect = (hasShop) => {
             console.log(hasShop);
             if (!hasShop) {
-                // Redirect user if they don't have a shop
-                setIsLoading(false);
-                console.log('why?');
-
+                
+                
                 navigate('/entry');
             }
             else {
