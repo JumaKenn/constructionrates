@@ -8,6 +8,7 @@ import Axios from "axios";
 import { API_ENDPOINT_1 } from './apis/api';
 import { AuthContext } from './AuthContext';
 import Select from 'react-select';
+import { measurements } from './shop/data/measurements';
 
 const MarketPlace = () => {
   const [showForm, setShowForm] = useState(false);
@@ -16,15 +17,19 @@ const MarketPlace = () => {
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [subtitle, setSubtitle] = useState('');
   const [components, setComponents] = useState([]);
   const [viewingComponent, setViewingComponent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageurl] = useState('');
   const [categories, setCategories] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [searchValue2, setSearchValue2] = useState('');
+
+
   // const { user } = useContext(AuthContext);
   const user = localStorage.getItem('user');
-            
+
   const tokenizer = localStorage.getItem('auth_token');
 
   useEffect(() => {
@@ -36,25 +41,28 @@ const MarketPlace = () => {
     }
   }, []);
   useEffect(() => {
-        // Fetch data from the API endpoint
-        fetch(`${API_ENDPOINT_1}/apis/categories/`)
-            .then(response => response.json())
+    // Fetch data from the API endpoint
+    fetch(`${API_ENDPOINT_1}/apis/categories/`)
+      .then(response => response.json())
 
-            .then(result => {
-                setCategories(result);
-                console.log(result);
+      .then(result => {
+        setCategories(result);
+        console.log(result);
 
-                // setLoading(false); // Set loading to false after data is fetched
-            });
-    }, []);
-   
+        // setLoading(false); // Set loading to false after data is fetched
+      });
+  }, []);
+
   const handleReload = () => {
     // Reload the page
     window.location.reload(false);
   };
- 
+
   const handleSelectedCategory = (selectedOption) => {
     setCategory(selectedOption);
+  }
+  const handleSubtitleChange = (selectedsubtitle) => {
+    setSubtitle(selectedsubtitle);
   }
 
   const handleInputChange = (event) => {
@@ -67,7 +75,7 @@ const MarketPlace = () => {
       setPrice(value);
     } else if (name === 'quantity') {
       setQuantity(value);
-    } 
+    }
 
   };
 
@@ -104,6 +112,7 @@ const MarketPlace = () => {
       price,
       quantity,
       category,
+      subtitle,
       image: event.target.picture.files[0], // Access the uploaded image file
     };
 
@@ -118,6 +127,8 @@ const MarketPlace = () => {
     setDescription('');
     setPrice('');
     setQuantity('');
+    setCategory('');
+    setSubtitle('');
 
     // Hide the form after submission
     setShowForm(false);
@@ -151,7 +162,7 @@ const MarketPlace = () => {
             const product = {
               title: component.itemName,
               description: component.description,
-              subtitle: 'per bag',
+              subtitle: component.subtitle,
               category: component.category,
               price: component.price,
               quantity: component.quantity,
@@ -236,23 +247,23 @@ const MarketPlace = () => {
             <br />
             <label className='labelformarket'>
               Category:
-              
-               <Select className="selectcategory"
-                                isSearchable
 
-                                options={categories.map(category => ({ value: category, label: category}))}
-                                placeholder={searchValue ? searchValue : "Search.."}
-                               
-                                onChange={(selectedOption) => {
-                                    // Store the selected search value in the state variable
-                                    setSearchValue(selectedOption.value);
-                                    handleSelectedCategory(selectedOption.value);
+              <Select className="selectcategory"
+                isSearchable
 
-                                }}
-                                required
-                            />
+                options={categories.map(category => ({ value: category, label: category }))}
+                placeholder={searchValue ? searchValue : "Search.."}
 
-              
+                onChange={(selectedOption) => {
+                  // Store the selected search value in the state variable
+                  setSearchValue(selectedOption.value);
+                  handleSelectedCategory(selectedOption.value);
+
+                }}
+                required
+              />
+
+
             </label>
             <br />
             <label className='labelformarket'>
@@ -278,17 +289,41 @@ const MarketPlace = () => {
               />
             </label>
             <br />
-            <label className='labelformarket'>
-              Quantity:
-              <input
-                type="number"
-                name="quantity"
-                value={quantity}
-                onChange={handleInputChange}
-                className="form-input"
-                required
-              />
-            </label>
+            <div className="form-horizontal">
+              <label className='labelformarket'>
+                Quantity:
+                <input
+                  type="number"
+                  name="quantity"
+                  value={quantity}
+                  onChange={handleInputChange}
+                  className="form-input"
+                  required
+                />
+              </label>
+              <div className='subtitle'>
+                <label className="labelformarket">
+                  Unit:
+                  <Select className='selectsubtitle'
+                    isSearchable
+
+                    options={measurements.map(measurement => ({ value: measurement, label: measurement }))}
+                    placeholder={searchValue2 ? searchValue2 : "Search.."}
+
+                    onChange={(selectedsubtitle) => {
+                      console.log(selectedsubtitle);
+                      setSearchValue2(selectedsubtitle.value);
+                      handleSubtitleChange(selectedsubtitle.value);
+                    }
+
+                    }
+
+                    required
+
+                  />
+                </label>
+              </div>
+            </div>
             <br />
             <label className='labelformarket'>
               Picture:

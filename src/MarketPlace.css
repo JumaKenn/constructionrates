@@ -17,10 +17,17 @@
   border-radius: 10px;
   border-color: black;
 }
+
 .selectcategory {
-  color:  black;
+  color: black;
   margin-right: 100px;
 }
+
+.selectsubtitle {
+  color: black;
+
+}
+
 .form-input,
 .form-textarea {
   width: 100%;
@@ -137,4 +144,30 @@
 
 .header2tag {
   color: white;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.form-horizontal {
+  display: inline-block;
+  align-items: center;
+  gap: 2;
+
+
+  /* Adjust the gap between form elements as needed */
+
+  /* Vertically center the form elements */
+}
+
+.subtitle {
+  display: flex;
+  padding-left: 10px;
 }

@@ -251,6 +251,7 @@ const Cards = () => {
                     </div>
                     {/* Render the selected category */}
                     {selectedCategory ? (
+                       
                         <div className="products" key={selectedCategory}>
 
                             <h1>{selectedCategory}</h1>

@@ -32,14 +32,18 @@ const Register = () => {
       });
       navigate('/login')
 
-      console.log(response.data); // Handle success response
+      console.log('success', response.data); // Handle success response
     } catch (error) {
       if (error.response) {
-        console.log(error.response.data); // Handle error response
-        setErrorMessage(error.response.data.message); // Store error message in state
-      } else {
-        console.log('An error occurred:', error.message); // Handle generic error
-        setErrorMessage(error.message); // Store generic error message in state
+        console.log('error', error.response.data); // Handle error response
+        if (error.response.data.username && Array.isArray(error.response.data.username)) {
+          // Check if the 'username' property exists and if it's an array
+          const errorMessage = error.response.data.username[0];
+          setErrorMessage(errorMessage);
+        } else {
+          // If the structure is different than expected, set a generic error message
+          setErrorMessage("An error occurred. Please try again later.");
+        }
       }
     }
   };
@@ -52,9 +56,7 @@ const Register = () => {
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
     if (password !== confirmPassword) {
-      console.log(password);
-      console.log(confirmPassword);
-      console.log('passwords do not match');
+
       setPasswordMatchError(false);
 
 
@@ -85,10 +87,11 @@ const Register = () => {
               <MDBInput wrapperClass='mb-4' placeholder='Email address' id='formControlLg' type='email' size='lg' onChange={(e) => setEmail(e.target.value)} />
               <MDBInput wrapperClass='mb-4' placeholder='Password' id='formControlLg' type='password' size='lg' onChange={handlePasswordChange} />
               <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='formControlLg' type='password' size='lg' onChange={handleConfirmPasswordChange} />
+              <div className='text-center text-md-start mt-4 pt-2'>
 
-              {passwordMatchError && <p className='link-danger'>Passwords do not match.</p>}
-              <p className='error-message'>{errorMessage}</p>
-
+                {passwordMatchError && <p className='link-danger'>Passwords do not match.</p>}
+                <p className='error-message'>{errorMessage}</p>
+              </div>
 
 
 
