@@ -54,15 +54,15 @@ To run the app locally, follow these steps:
 Screenshots
 
     Landing Page
-    ![Alt text](image.png)
+    ![Landing Page](assets/image.png)
 
     Rates Page
-    ![Alt text](image-1.png)
+    ![Rates Page](assets/image-1.png)
 
     Shop Page
-    ![Alt text](image-2.png)
+    ![Shop Page](assets/image-2.png)
     Manage Shop Page
-    ![Alt text](image-3.png)
+    ![Manage Shop Page](assets/image-3.png)
 
 ## Contributing
 
