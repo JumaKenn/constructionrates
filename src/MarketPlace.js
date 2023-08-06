@@ -179,7 +179,7 @@ const MarketPlace = () => {
       console.log(products); // This will show you the array of products with uploaded image URLs
 
       // Send the products data to the API endpoint as JSON
-      const response = await fetch(`${API_ENDPOINT_1}/apis/products/${user}/`, {
+      const response = await fetch(`${API_ENDPOINT_1}/apis/products/${user}/0/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ const MarketPlace = () => {
 
         // Display a success message to the user
         alert('Products added successfully!');
-        handleReload();
+        // handleReload();
       } else {
         // Display an error message to the user
         alert('Failed to add products.');
@@ -346,7 +346,7 @@ const MarketPlace = () => {
         </div>
       )}
       <div className="component-list-container">
-        <h2 className='header2tag'>Added Items:</h2>
+        <h3 className='header2tag'>Preview added products:</h3>
         {components.map((component, index) => (
           <div key={index} className="component-entry">
             <span className="counter">{index + 1}. </span>

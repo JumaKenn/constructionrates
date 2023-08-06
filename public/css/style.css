@@ -167,6 +167,39 @@ hr {
 .navbar .navbar-toggle:hover>.icon-bar {
   background-color: #608dfd;
 }
+/* Adjustments for screens with a maximum width of 768px */
+@media (max-width: 768px) {
+  #menu.navbar .navbar-nav {
+    margin-left: 0; /* Reset the left margin */
+  }
+
+  #menu.navbar .navbar-nav>li>a {
+    font-size: 14px; /* Reduce font size for small screens */
+    margin: 6px 10px 0; /* Adjust margins for better spacing */
+  }
+
+  #menu.navbar .navbar-nav>li>a:after {
+    display: none; /* Hide the underlines on small screens */
+  }
+
+  .navbar-toggler {
+    border-radius: 0;
+    background-color: #fff;
+    border-color: #608dfd;
+    margin-top: 5px;
+  }
+
+  .navbar-toggle:hover,
+  .navbar-toggle:focus {
+    background-color: #fff;
+    border-color: #608dfd;
+  }
+
+  .navbar-toggle:hover>.icon-bar {
+    background-color: #608dfd;
+  }
+}
+
 
 .section-title {
   margin-bottom: 70px;

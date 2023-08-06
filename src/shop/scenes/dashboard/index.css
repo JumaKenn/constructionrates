@@ -1,7 +1,33 @@
 .img {
-
   height: auto;
   background-color: white;
   width: 200px;
   height: 200px;
+}
+
+.responsiveBox {
+  display: grid;
+  grid-template-columns: repeat(14, 2fr);
+  grid-auto-rows: 140px;
+  gap: 10px;
+}
+.delete {
+  margin-bottom: 0px;
+  margin-top: 250px;
+  margin-left: -400px;
+  font-style: italic;
+  
+}
+.deletebtn {
+  
+  background-color: transparent;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .responsiveBox {
+    display: inline-block;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 80px;
+  }
 }

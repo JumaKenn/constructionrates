@@ -130,6 +130,10 @@
     margin-right: 0;
     border-right: none;
   }
+  .add-component-button {
+    background-color: rgb(125, 145, 243);
+    margin-right: 280px;
+  }
 
   .marketplace-form {
     margin-top: 0;

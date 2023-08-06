@@ -49,8 +49,12 @@ const Cards = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [open, setOpen] = useState(false);
+    const [isCategoriesVisible, setCategoriesVisible] = useState(false);
 
-    const handleClose = () => setOpen(false);
+    const handleClose = () =>{
+    console.log('close called');
+     setOpen(false);
+    }
 
     const handleOpen = (product) => {
         setOpen(true);
@@ -189,6 +193,28 @@ const Cards = () => {
         const categories = [...new Set(filteredProducts.map(product => product.category))];
         return categories;
     };
+    function getUniqueProductOptions() {
+        const uniqueProducts = {}; // Using an object to ensure uniqueness
+        filteredProducts.forEach(product => {
+          const lowercaseTitle = product.title.toLowerCase();
+          if (!uniqueProducts[lowercaseTitle]) {
+            uniqueProducts[lowercaseTitle] = true;
+            return {
+              value: product.title,
+              label: capitalizeFirstLetter(product.title)
+            };
+          }
+        });
+      
+        return Object.keys(uniqueProducts).map(title => ({
+          value: title,
+          label: capitalizeFirstLetter(title)
+        }));
+      }
+      
+      function capitalizeFirstLetter(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+      }
 
     return (
 
@@ -203,7 +229,7 @@ const Cards = () => {
 
                     <Select
                         isSearchable
-                        options={filteredProducts.map(product => ({ value: product.title, label: product.title }))}
+                        options={getUniqueProductOptions()}
                         placeholder={searchValue ? searchValue : "Let us help you get what you want faster. Search here..."}
                         // placeholder='Let us help you get what you want faster. Search here...'
                         onChange={(selectedOption) => {
@@ -219,16 +245,16 @@ const Cards = () => {
                 <div>
                     <div className="sidebar">
                         <div className="top-right">
-                            <Button className="sort-button" onClick={() => sortProductsByDistance(filteredProducts)}>
+                            {/* <Button className="sort-button" onClick={() => sortProductsByDistance(filteredProducts)}>
                                 Sort by Distance
-                            </Button>
+                            </Button> */}
 
                         </div>
                         <div className="search">
                             <Select
                                 isSearchable
-                                options={filteredProducts.map(product => ({ value: product.title, label: product.title }))}
-                                placeholder={searchValue ? searchValue : "Search.."}
+                                options={getUniqueProductOptions()}
+                                placeholder={searchValue ? searchValue : "Search by product"}
                                 // placeholder='Let us help you get what you want faster. Search here...'
                                 onChange={(selectedOption) => {
                                     // Store the selected search value in the state variable
@@ -239,19 +265,41 @@ const Cards = () => {
                             />
                         </div>
                     </div>
-                    <div className="categories">
-                        <ul className="listed">
-                            <h3>Categories</h3>
-                            {getUniqueCategories().map(category => (
-                                <li className="list-items" key={category} onClick={() => handleCategoryFilter(category)}
 
-                                >{category}</li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/* Check if the screen size is less than 768px */}
+                    {window.innerWidth < 768 ? (
+                        // Render categories as a dropdown
+                        <div className="categories-dropdown">
+                            <Select
+                                options={getUniqueCategories().map(category => ({
+                                    value: category,
+                                    label: category
+                                }))}
+                                onChange={selectedOption => handleCategoryFilter(selectedOption.value)}
+                                placeholder="Search by Category"
+                            />
+                        </div>
+                    ) : (
+                        // Render categories as a slide-in menu
+                        <div className="categories">
+                            <ul className="listed">
+                                <h3>Categories</h3>
+                                {getUniqueCategories().map(category => (
+                                    <li
+                                        className="list-items"
+                                        key={category}
+                                        onClick={() => handleCategoryFilter(category)}
+                                    >
+                                        {category}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
                     {/* Render the selected category */}
                     {selectedCategory ? (
-                       
+
                         <div className="products" key={selectedCategory}>
 
                             <h1>{selectedCategory}</h1>
@@ -259,9 +307,14 @@ const Cards = () => {
                             <Row>
                                 {sortedProducts.map((product, index) => (
                                     <Col md="6" lg="3" key={index}>
+                                        
                                         <div className="card-image-container">
                                             <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
-                                        </div>
+                                        
+                                        <div className="viewsupplierssmall">
+                                                        <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                        </div>
+                                                        </div>
                                         <CardBody className="cardfbody">
                                             <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
                                             <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
@@ -270,7 +323,13 @@ const Cards = () => {
 
                                             <CardText className="product-description">Avg. price: {product.price} KES</CardText>
                                             <div>
-                                                <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                
+                                            
+                                                <div className="viewsuppliers">
+                                                 <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                 </div>
+                                           
+                                               
 
                                                 <Modal
                                                     open={open}
@@ -279,6 +338,9 @@ const Cards = () => {
                                                     aria-describedby="modal-modal-description"
                                                 >
                                                     <Box sx={style}>
+                                                        <div className="handleclose">
+                                                    <Button onClick={() => handleClose()}>Close</Button>
+                                                    </div>
                                                         <Typography id="modal-modal-title" variant="h6" component="h2">
                                                             {product.title}
                                                         </Typography>
@@ -316,6 +378,10 @@ const Cards = () => {
                                                     <Col md="6" lg="3" key={index}>
                                                         <div className="card-image-container">
                                                             <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
+                                                        
+                                                        <div className="viewsupplierssmall">
+                                                        <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                        </div>
                                                         </div>
                                                         <CardBody className="cardfbody">
                                                             <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
@@ -324,8 +390,10 @@ const Cards = () => {
                                                             <CardText className="product-description">{distance(product.location)}</CardText>
                                                             <CardText className="product-description">Avg. price: {product.price} KES</CardText>
                                                             <div>
+                                                            <div className="viewsuppliers">
                                                                 <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
-
+                                                                </div>
+                                           
                                                                 <Modal
                                                                     open={open}
                                                                     onClose={handleClose}
@@ -333,6 +401,9 @@ const Cards = () => {
                                                                     aria-describedby="modal-modal-description"
                                                                 >
                                                                     <Box sx={style}>
+                                                                    <div className="handleclose">
+                                                                    <Button onClick={() => handleClose()}>Close</Button>
+                                                                    </div>
                                                                         <Typography id="modal-modal-title" variant="h6" component="h2">
                                                                             {product.title}
                                                                         </Typography>
@@ -359,17 +430,21 @@ const Cards = () => {
 
                     ) : (
                         <React.Fragment>
-                            {/* Render filtered products of the searched category as cards */}
+                            {/* Render filtered products of the searched product as cards */}
                             <div className="productss" key={searchValue}>
                                 <div className="productsearched">
                                     <Row>
-                                        {filteredProducts
-                                            .filter(product => product.title === searchValue)
-                                            .map((product, index) => (
+                                    {filteredProducts
+                                    .filter(product => product.title.toLowerCase().includes(searchValue.toLowerCase()))
+                                    .map((product, index) => (
                                                 <Col md="6" lg="3" key={index}>
                                                     <div className="card-image-container">
                                                         <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
-                                                    </div>
+                                                    
+                                                    <div className="viewsupplierssmall">
+                                                        <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                        </div>
+                                                        </div>
                                                     <CardBody className="cardfbody">
                                                         <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
                                                         <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
@@ -377,8 +452,10 @@ const Cards = () => {
                                                         <CardText className="product-description">{distance(product.location)}</CardText>
                                                         <CardText className="product-description">Avg. price: {product.price} KES</CardText>
                                                         <div>
+                                                        <div className="viewsuppliers">
                                                             <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
-
+                                                            </div>
+                                           
                                                             <Modal
                                                                 open={open}
                                                                 onClose={handleClose}
@@ -386,6 +463,9 @@ const Cards = () => {
                                                                 aria-describedby="modal-modal-description"
                                                             >
                                                                 <Box sx={style}>
+                                                                <div className="handleclose">
+                                                                <Button onClick={() => handleClose()}>Close</Button>
+                                                                </div>
                                                                     <Typography id="modal-modal-title" variant="h6" component="h2">
                                                                         {product.title}
                                                                     </Typography>
@@ -417,7 +497,11 @@ const Cards = () => {
                                                 <Col md="6" lg="3" key={index}>
                                                     <div className="card-image-container">
                                                         <CardImg className="img" alt="Product Image" src={product.image} top width="200%" />
-                                                    </div>
+                                                    
+                                                    <div className="viewsupplierssmall">
+                                                        <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                        </div>
+                                                        </div>
                                                     <CardBody className="cardfbody">
                                                         <CardTitle tag="h5" className="product-title">{product.title}</CardTitle>
                                                         <CardSubtitle className="mb-2 text-muted" tag="h6">{product.subtitle}</CardSubtitle>
@@ -425,8 +509,10 @@ const Cards = () => {
                                                         <CardText className="product-description">{distance(product.location)}</CardText>
                                                         <CardText className="product-description">Avg. price: {product.price} KES</CardText>
                                                         <div>
-                                                            <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
-
+                                                        <div className="viewsuppliers">
+                                                        <Button onClick={() => handleOpen(product)}>View Suppliers</Button>
+                                                        </div>
+                                           
                                                             <Modal
                                                                 open={open}
                                                                 onClose={handleClose}
@@ -434,6 +520,10 @@ const Cards = () => {
                                                                 aria-describedby="modal-modal-description"
                                                             >
                                                                 <Box sx={style}>
+                                                                <div className="handleclose">
+                                                                    <Button onClick={() => handleClose()}>Close</Button>
+                                                                    </div>
+                                                              
                                                                     <Typography id="modal-modal-title" variant="h6" component="h2">
                                                                         {product.title}
                                                                     </Typography>
