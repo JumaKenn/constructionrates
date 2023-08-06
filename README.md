@@ -30,57 +30,53 @@ Check out the live demo of the app at [pososta.com](https://www.pososta.com).
 To run the app locally, follow these steps:
 
 1. Clone the repository:
-<pre>
-    
-```sh
-git clone https://github.com/your-username/your-repo.git
-```
-</pre>
+
+```git clone https://github.com/your-username/your-repo.git```
+
 2. Navigate to the app's directory:
 
-sh
+```cd construction-rates-hardware-shop```
 
-cd construction-rates-hardware-shop
 
-Install dependencies:
+3. Install dependencies:
 
-sh
+```npm install```
+    
 
-    npm install
+## Usage
 
-Usage
+1. Start the development server:
 
-    Start the development server:
+```npm start```
 
-    sh
-
-    npm start
-
-    Open your web browser and go to http://localhost:3000 to access the app.
+2. Open your web browser and go to http://localhost:3000 to access the app.
 
 Screenshots
 
-    Rates Page
-    Shop Page
-    Manage Shop Page
+    Landing Page
+    ![Alt text](image.png)
 
-Contributing
+    Rates Page
+    ![Alt text](image-1.png)
+
+    Shop Page
+    ![Alt text](image-2.png)
+    Manage Shop Page
+    ![Alt text](image-3.png)
+
+## Contributing
 
 Contributions are welcome! Please follow these steps:
 
-    Fork the repository.
+    1. Fork the repository.
+   2. Create a new branch for your feature/fix:
 
-    Create a new branch for your feature/fix:
+```git checkout -b feature/my-feature```
 
-    sh
+3. Commit your changes and push to your fork:
 
-git checkout -b feature/my-feature
+```git commit -m "Add my feature"```
 
-Commit your changes and push to your fork:
+```git push origin feature/my-feature```
 
-sh
-
-git commit -m "Add my feature"
-git push origin feature/my-feature
-
-Create a pull request to the main repository.
+3. Create a pull request to the main repository.
