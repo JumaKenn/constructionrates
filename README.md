@@ -51,18 +51,21 @@ To run the app locally, follow these steps:
 
 2. Open your web browser and go to http://localhost:3000 to access the app.
 
-Screenshots
+## Screenshots
 
-    Landing Page
-    ![Landing Page](assets/image.png)
+### Landing Page
+![Landing Page](assets/image.png)
 
-    Rates Page
-    ![Rates Page](assets/image-1.png)
+### Rates Page
+![Rates Page](assets/image-1.png)
 
-    Shop Page
-    ![Shop Page](assets/image-2.png)
-    Manage Shop Page
-    ![Manage Shop Page](assets/image-3.png)
+### Shop Page
+![Shop Page](assets/image-2.png)
+
+### Manage Shop Page
+![Manage Shop Page](assets/image-3.png)
+
+
 
 ## Contributing
 
